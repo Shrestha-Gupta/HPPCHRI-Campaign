@@ -2,7 +2,11 @@
  * controllers/registrationController.js
  * Public: create registration, get single registration by ID
  */
-const Registration = require('../models/Registration');
+const Registration           = require('../models/Registration');
+const { sendConfirmationEmail } = require('../services/emailService');
+
+// ─── Email format validator ───────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // ─── Generate unique Registration ID ────────────────────────────────
 async function generateUniqueId() {
@@ -26,7 +30,7 @@ exports.createRegistration = async (req, res) => {
       awarenessTopics, pledgeAccepted,
     } = req.body;
 
-    // Server-side validation
+    // ── Server-side validation ────────────────────────────────────────
     if (!fullName || !phone || !category) {
       return res.status(400).json({ success: false, message: 'Name, phone, and category are required.' });
     }
@@ -40,7 +44,16 @@ exports.createRegistration = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Pledge acceptance is required.' });
     }
 
-    // Generate unique ID
+    // ── Email — required + format check ──────────────────────────────
+    const emailNorm = email?.trim()?.toLowerCase() || '';
+    if (!emailNorm) {
+      return res.status(400).json({ success: false, message: 'Email address is required.' });
+    }
+    if (!EMAIL_RE.test(emailNorm)) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    }
+
+    // ── Generate unique ID ────────────────────────────────────────────
     const { registrationId, registrationNumber } = await generateUniqueId();
 
     const regDate = new Date().toLocaleDateString('en-IN', {
@@ -52,7 +65,7 @@ exports.createRegistration = async (req, res) => {
       registrationNumber,
       fullName:         fullName.trim(),
       phone:            phone.replace(/\D/g, ''),
-      email:            email?.trim()?.toLowerCase() || 'N/A',
+      email:            emailNorm,
       category,
       institution:      institution?.trim() || 'Individual Volunteer',
       city:             city?.trim() || 'Gorakhpur',
@@ -66,13 +79,21 @@ exports.createRegistration = async (req, res) => {
       source: 'form',
     });
 
+    // ── Save to MongoDB FIRST ─────────────────────────────────────────
     await record.save();
 
+    // ── Send confirmation email AFTER successful save ─────────────────
+    // sendConfirmationEmail never throws — email failure does NOT affect
+    // the registration or the API response status.
+    const emailResult = await sendConfirmationEmail(record.toObject());
+
     return res.status(201).json({
-      success: true,
-      message: 'Registration successful.',
-      data: record,
+      success:   true,
+      message:   'Registration successful.',
+      emailSent: emailResult.sent,
+      data:      record,
     });
+
   } catch (err) {
     if (err.code === 11000) {
       return res.status(409).json({ success: false, message: 'Duplicate registration ID. Please try again.' });

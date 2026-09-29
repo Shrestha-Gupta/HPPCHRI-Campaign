@@ -246,6 +246,7 @@
             <th>Registration ID</th>
             <th>Name</th>
             <th>WhatsApp</th>
+            <th>Email</th>
             <th>Category</th>
             <th>Institution</th>
             <th>City</th>
@@ -254,7 +255,7 @@
           </tr>
         </thead>
         <tbody id="reg-tbody">
-          <tr><td colspan="8" style="text-align:center;padding:24px;color:#4a6080;">Loading…</td></tr>
+          <tr><td colspan="9" style="text-align:center;padding:24px;color:#4a6080;">Loading…</td></tr>
         </tbody>
       </table>
     </div>
@@ -369,7 +370,12 @@
 // ═══════════════════════════════════════════════════════════════════
 const API_BASE_URL = (() => {
   const h = window.location.hostname;
-  if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:5000';
+  // Mirror the page hostname exactly so the HttpOnly cookie domain matches.
+  // 127.0.0.1 → API at 127.0.0.1:5000 (same host, cookie sent correctly)
+  // localhost  → API at localhost:5000  (same host, cookie sent correctly)
+  // Vercel / any other host → same-origin empty string
+  if (h === '127.0.0.1') return 'http://127.0.0.1:5000';
+  if (h === 'localhost')  return 'http://localhost:5000';
   return ''; // same-origin when deployed on Vercel
 })();
 
@@ -494,7 +500,7 @@ async function loadRegistrations(page=1){
   // Table
   const tbody = document.getElementById('reg-tbody');
   if(!res.data || res.data.length===0){
-    tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:24px;color:#4a6080;">
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:24px;color:#4a6080;">
       No registrations found.</td></tr>`;
   } else {
     tbody.innerHTML = res.data.map(r=>`
@@ -502,6 +508,7 @@ async function loadRegistrations(page=1){
         <td class="reg-id-cell">${esc(r.registrationId)}</td>
         <td>${esc(r.fullName)}</td>
         <td>${esc(r.phone)}</td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.email)}</td>
         <td>${catBadge(r.category)}</td>
         <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.institution)}</td>
         <td>${esc(r.city)}</td>

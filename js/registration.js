@@ -11,10 +11,10 @@
 // Express dev server running on port 5000.
 const API_BASE_URL = (() => {
   const h = window.location.hostname;
-  if (h === 'localhost' || h === '127.0.0.1') {
-    return 'http://localhost:5000';
-  }
-  return ''; // same-origin: /api/... requests go to the Vercel function
+  // Mirror page hostname so HttpOnly cookie domain always matches the API domain.
+  if (h === '127.0.0.1') return 'http://127.0.0.1:5000';
+  if (h === 'localhost')  return 'http://localhost:5000';
+  return ''; // same-origin on Vercel
 })();
 
 
@@ -116,6 +116,17 @@ function initRegistrationForm() {
       alert('कृपया एक वैध 10-अंकीय व्हाट्सएप नंबर दर्ज करें / Please enter a valid 10-digit WhatsApp number.');
       return;
     }
+    // Email — required + basic format
+    if (!email) {
+      alert('कृपया ईमेल पता दर्ज करें / Please enter your email address.');
+      document.getElementById('reg-email').focus();
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('कृपया एक वैध ईमेल पता दर्ज करें / Please enter a valid email address.');
+      document.getElementById('reg-email').focus();
+      return;
+    }
     if (!pledgeChecked) {
       alert('कृपया जागरूकता अभियान की प्रतिज्ञा स्वीकार करें / Please accept the awareness campaign pledge.');
       return;
@@ -175,6 +186,26 @@ function initRegistrationForm() {
       if (passContainer) {
         passContainer.classList.add('active');
         passContainer.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Non-blocking email notice (does NOT affect pass validity)
+      if (result.emailSent === false) {
+        const notice = document.createElement('div');
+        notice.style.cssText = [
+          'margin:12px 16px 0',
+          'padding:10px 14px',
+          'background:#fff8e1',
+          'border-left:3px solid #f9a825',
+          'border-radius:4px',
+          'font-size:.82rem',
+          'color:#5d4037',
+          'line-height:1.5',
+        ].join(';');
+        notice.innerHTML = '⚠️ Registration successful, but the confirmation email could not be sent. ' +
+          'Your Registration ID and pass are still fully valid.<br>' +
+          '<em style="color:#795548;">पंजीकरण सफल हुआ, परंतु पुष्टि ईमेल नहीं भेजा जा सका। आपका पास और पंजीकरण संख्या मान्य है।</em>';
+        const passRender = document.getElementById('pass-render-area');
+        if (passRender) passRender.appendChild(notice);
       }
 
     } catch (networkErr) {

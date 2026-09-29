@@ -24,7 +24,7 @@ const registrationSchema = new mongoose.Schema(
     // ─── Personal details ──────────────────────────────────────────
     fullName: { type: String, required: true, trim: true, maxlength: 120 },
     phone:    { type: String, required: true, trim: true, match: /^[6-9]\d{9}$/ },
-    email:    { type: String, trim: true, lowercase: true, default: 'N/A' },
+    email:    { type: String, required: true, trim: true, lowercase: true, match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
 
     // ─── Participant classification ────────────────────────────────
     category: {
