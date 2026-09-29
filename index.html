@@ -116,7 +116,7 @@
           <li><a href="#facilities" class="nav-link">Facilities</a></li>
           <li><a href="#patron-messages" class="nav-link">Patronage</a></li>
           <li><a href="#contact-coordinators" class="nav-link">Contact</a></li>
-          <li><button id="admin-modal-btn" class="nav-link nav-link-badge">Delegates</button></li>
+          <li><a href="admin.html" class="nav-link nav-link-badge" id="admin-nav-link">Admin</a></li>
         </ul>
       </nav>
     </div>
@@ -749,32 +749,32 @@
               
               <!-- Full Name -->
               <div class="form-group">
-                <label class="form-label" for="reg-name">Full Name <span class="required">*</span></label>
-                <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Chandra Sharma" required />
+                <label class="form-label" for="reg-name">Full Name / पूरा नाम <span class="required">*</span></label>
+                <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Chandra Sharma / उदा.: रमेश चंद्र शर्मा" required />
               </div>
 
               <!-- WhatsApp Phone -->
               <div class="form-group">
-                <label class="form-label" for="reg-phone">WhatsApp Number <span class="required">*</span></label>
-                <input type="tel" id="reg-phone" class="form-control" placeholder="10-digit mobile (e.g. 9838000000)" required />
-                <span class="form-hint">Used to send your registration confirmation and pass</span>
+                <label class="form-label" for="reg-phone">WhatsApp Number / व्हाट्सएप नंबर <span class="required">*</span></label>
+                <input type="tel" id="reg-phone" class="form-control" placeholder="10-digit / 10 अंकों का नंबर (e.g. 9838000000)" required />
+                <span class="form-hint">Used to send your registration confirmation and pass / पंजीकरण पुष्टि और पास भेजने के लिए उपयोग किया जाएगा</span>
               </div>
 
               <!-- Email Address -->
               <div class="form-group">
-                <label class="form-label" for="reg-email">Email Address</label>
-                <input type="email" id="reg-email" class="form-control" placeholder="e.g. name@example.com" />
+                <label class="form-label" for="reg-email">Email Address / ईमेल पता</label>
+                <input type="email" id="reg-email" class="form-control" placeholder="e.g. name@example.com / उदा.: name@example.com" />
               </div>
 
               <!-- Participant Category -->
               <div class="form-group">
-                <label class="form-label" for="reg-category">Participant Category <span class="required">*</span></label>
+                <label class="form-label" for="reg-category">Participant Category / प्रतिभागी श्रेणी <span class="required">*</span></label>
                 <select id="reg-category" class="form-control" required>
-                  <option value="">-- Select Your Category --</option>
-                  <option value="student">Student (School / College / University)</option>
-                  <option value="club">Club Member (Rotary, Lions, NGO, Youth Club)</option>
-                  <option value="influencer">Content Creator / Social Media Influencer</option>
-                  <option value="citizen">General Citizen / Health Volunteer</option>
+                  <option value="">-- Select Your Category / अपनी श्रेणी चुनें --</option>
+                  <option value="student">Student / छात्र (School / College / University)</option>
+                  <option value="club">Club Member / क्लब सदस्य (Rotary, Lions, NGO, Youth Club)</option>
+                  <option value="influencer">Content Creator / कंटेंट क्रिएटर / Social Media Influencer / सोशल मीडिया इन्फ्लुएंसर</option>
+                  <option value="citizen">General Citizen / Health Volunteer / सामान्य नागरिक / स्वास्थ्य स्वयंसेवक</option>
                 </select>
               </div>
 
@@ -782,22 +782,23 @@
               <div class="form-group full-width" id="institution-group">
                 <label class="form-label" id="institution-label" for="reg-institution">
                   Institution / School / College / Club Name
+                  <small style="font-weight:400;color:var(--text-muted);">संस्था / विद्यालय / महाविद्यालय / क्लब का नाम</small>
                 </label>
-                <input type="text" id="reg-institution" class="form-control" placeholder="e.g. DDU Gorakhpur University / MMMUT / AIIMS / Rotary Club" />
+                <input type="text" id="reg-institution" class="form-control" placeholder="e.g. DDU Gorakhpur University / MMMUT / AIIMS / संस्था का नाम" />
               </div>
 
               <!-- City / District -->
               <div class="form-group">
-                <label class="form-label" for="reg-city">City / District <span class="required">*</span></label>
-                <input type="text" id="reg-city" class="form-control" value="Gorakhpur" placeholder="e.g. Gorakhpur, Deoria, Basti, Maharajganj" required />
+                <label class="form-label" for="reg-city">City / District / शहर / जिला <span class="required">*</span></label>
+                <input type="text" id="reg-city" class="form-control" value="Gorakhpur" placeholder="e.g. Gorakhpur, Deoria / गोरखपुर, देवरिया" required />
               </div>
 
               <!-- Are you active on Social Media? -->
               <div class="form-group">
-                <label class="form-label" for="reg-social-active">Active on Social Media? <span class="required">*</span></label>
+                <label class="form-label" for="reg-social-active">Active on Social Media? / क्या आप सोशल मीडिया पर सक्रिय हैं? <span class="required">*</span></label>
                 <select id="reg-social-active" class="form-control" required>
-                  <option value="yes">Yes, I create / share content</option>
-                  <option value="no">No, participating offline</option>
+                  <option value="yes">Yes, I create / share content / हाँ, मैं कंटेंट बनाता/बनाती हूँ</option>
+                  <option value="no">No, participating offline / नहीं, ऑफलाइन भागीदारी</option>
                 </select>
               </div>
 
@@ -805,11 +806,11 @@
               <div class="form-group full-width" id="social-details-group">
                 <div style="background: #f8fafc; border: 1px solid var(--border-medium); border-radius: var(--border-radius-sm); padding: 18px;">
                   <div style="font-weight: 600; font-size: 0.92rem; color: var(--c-deep-blue); margin-bottom: 12px;">
-                    Social Media Channels (Where you will share awareness content)
+                    Social Media Channels / सोशल मीडिया चैनल (Where you will share awareness content / जहाँ आप जागरूकता सामग्री साझा करेंगे)
                   </div>
                   <div class="form-grid">
                     <div class="form-group">
-                      <label class="form-label">Primary Platform</label>
+                      <label class="form-label">Primary Platform / प्रमुख प्लेटफ़ॉर्म</label>
                       <select id="reg-platform" class="form-control">
                         <option value="Instagram">Instagram</option>
                         <option value="YouTube">YouTube</option>
@@ -819,8 +820,8 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label class="form-label">User Handle / Profile Link</label>
-                      <input type="text" id="reg-handle" class="form-control" placeholder="e.g. @your_username or profile URL" />
+                      <label class="form-label">User Handle / Profile Link / यूज़र हैंडल / प्रोफ़ाइल लिंक</label>
+                      <input type="text" id="reg-handle" class="form-control" placeholder="e.g. @your_username / उदा.: @your_username" />
                     </div>
                   </div>
                 </div>
@@ -830,46 +831,39 @@
               <div class="form-group full-width conditional-field" id="influencer-details-group">
                 <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: var(--border-radius-sm); padding: 18px;">
                   <div style="font-weight: 700; color: #92400e; margin-bottom: 6px;">
-                    ⭐ Influencer Category Benchmark (10,000+ Followers Requirement)
+                    ⭐ Influencer Category Benchmark / इन्फ्लुएंसर श्रेणी मानक (10,000+ Followers / फॉलोअर्स)
                   </div>
                   <p style="font-size: 0.85rem; color: #78350f; margin-bottom: 12px;">
-                    Influencers compete in an exclusive category to ensure fair judging for students. Verified creators receive official certificates and premium recognition.
+                    Influencers compete in an exclusive category for fair judging. / इन्फ्लुएंसर न्यायसंगत निर्णय हेतु अलग श्रेणी में प्रतिस्पर्धा करते हैं। Verified creators receive official certificates and recognition.
                   </p>
                   <div class="form-group">
-                    <label class="form-label" for="reg-followers">Approximate Follower Count on Main Platform *</label>
-                    <input type="number" id="reg-followers" class="form-control" placeholder="e.g. 15000" min="0" />
+                    <label class="form-label" for="reg-followers">Approximate Follower Count / अनुमानित फॉलोअर्स की संख्या *</label>
+                    <input type="number" id="reg-followers" class="form-control" placeholder="e.g. 15000 / उदा.: 15000" min="0" />
                   </div>
                 </div>
               </div>
 
               <!-- Preferred Awareness Topics -->
               <div class="form-group full-width">
-                <label class="form-label">Awareness Topics You Wish to Promote</label>
+                <label class="form-label">Awareness Topics You Wish to Promote / आप किन जागरूकता विषयों का प्रचार करना चाहते हैं?</label>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 6px;">
                   <label class="checkbox-group">
                     <input type="checkbox" name="topics" value="tobacco" checked />
-                    <span>Tobacco Cessation</span>
+                    <span>Tobacco Cessation / तंबाकू मुक्ति</span>
                   </label>
                   <label class="checkbox-group">
                     <input type="checkbox" name="topics" value="oral" checked />
-                    <span>Oral Cancer Signs</span>
+                    <span>Oral Cancer Signs / मुख कैंसर के लक्षण</span>
                   </label>
                   <label class="checkbox-group">
                     <input type="checkbox" name="topics" value="breast" checked />
-                    <span>Breast Cancer &amp; BSE</span>
+                    <span>Breast Cancer &amp; BSE / स्तन कैंसर एवं BSE</span>
                   </label>
                   <label class="checkbox-group">
                     <input type="checkbox" name="topics" value="cervical" checked />
-                    <span>Cervical Cancer &amp; HPV</span>
+                    <span>Cervical Cancer &amp; HPV / गर्भाशय ग्रीवा कैंसर एवं HPV</span>
                   </label>
-                  <label class="checkbox-group">
-                    <input type="checkbox" name="topics" value="lifestyle" />
-                    <span>Youth Fitness &amp; Diet</span>
-                  </label>
-                  <label class="checkbox-group">
-                    <input type="checkbox" name="topics" value="cyber" />
-                    <span>Cyber Safety &amp; Frauds</span>
-                  </label>
+
                 </div>
               </div>
 
@@ -878,18 +872,18 @@
                 <label class="checkbox-group" style="background: #f1f8f9; padding: 14px; border-radius: var(--border-radius-sm);">
                   <input type="checkbox" id="reg-pledge" required />
                   <span>
-                    <strong>Delegate Awareness Pledge:</strong> I commit to spreading medically accurate cancer awareness based on the Yuva Sanchar guidelines, encouraging timely screening, and tagging official HPPCHRI handles in my awareness contributions.
+                    <strong>Delegate Awareness Pledge / प्रतिनिधि जागरूकता प्रतिज्ञा:</strong> I commit to spreading medically accurate cancer awareness based on the Yuva Sanchar guidelines, encouraging timely screening, and tagging official HPPCHRI handles in my awareness contributions.<br><em style="font-size:0.87em;color:var(--text-muted);">मैं प्रतिज्ञा करता/करती हूँ कि युवा संचार दिशानिर्देशों के अनुसार चिकित्सीय रूप से सटीक कैंसर जागरूकता फैलाऊँगा/फैलाऊंगी, समय पर जांच को प्रोत्साहित करूंगा/करूंगी, और HPPCHRI के आधिकारिक हैंडल को टैग करूंगा/करूंगी।</em>
                   </span>
                 </label>
               </div>
 
               <!-- Submit Button -->
-              <div class="form-group full-width" style="text-align: center; margin-top: 10px;">
-                <button type="submit" class="btn btn-mint" style="width: 100%; max-width: 380px; padding: 14px; font-size: 1.05rem; margin: 0 auto;">
-                  <i class="fa-solid fa-id-card"></i> Complete Registration &amp; Generate Pass
+              <div class="form-group full-width" style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:10px;">
+                <button type="submit" class="btn btn-mint" style="display:inline-flex;width:auto;max-width:100%;padding:14px 28px;font-size:1rem;margin:0 auto;white-space:normal;word-break:break-word;text-align:center;box-sizing:border-box;">
+                  <i class="fa-solid fa-id-card"></i> Complete Registration &amp; Generate Pass / पंजीकरण पूरा करें एवं पास प्राप्त करें
                 </button>
                 <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
-                  Instant digital pass generation with unique verification ID
+                  Instant digital pass / अद्वितीय सत्यापन आईडी के साथ तत्काल डिजिटल पास
                 </div>
               </div>
 
@@ -920,130 +914,70 @@
   <section class="section section-alt" id="prizes-contests">
     <div class="container">
       <div class="section-header text-center">
-        <span class="section-subtitle">Official Recognition &amp; Awards Model</span>
-        <h2 class="section-title">Contest Structure &amp; Grand Prizes</h2>
+        <span class="section-subtitle">MMMUT Campaign — First Yuva Sanchar Drive</span>
+        <h2 class="section-title">Recognition &amp; Participation</h2>
         <p class="section-desc">
           Rooted in the official <strong>"Top 1% Selection &amp; Recognition Model"</strong> (Slide 16), HPPCHRI celebrates top awareness ambassadors across schools, colleges, community clubs, and digital creators.
         </p>
       </div>
 
-      <!-- Redesigned Grand Champions Podium -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 26px; margin-bottom: 42px;">
-        
-        <!-- 2nd Prize Card -->
+      <!-- MMMUT Recognition Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 26px; margin-bottom: 40px;">
+
+        <!-- Participation Certificate Card -->
         <div class="prize-podium-card" style="background: #ffffff; border-radius: var(--border-radius-lg); border: 2px solid var(--border-subtle); overflow: hidden; box-shadow: var(--shadow-md); display: flex; flex-direction: column;">
-          <div style="background: linear-gradient(135deg, var(--c-deep-teal) 0%, var(--c-teal) 100%); color: #ffffff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: var(--border-radius-full);">Rank 2</span>
-            <span style="font-size: 0.85rem; font-weight: 600;">First Runner-Up</span>
+          <div style="background: linear-gradient(135deg, var(--c-deep-teal) 0%, var(--c-teal) 100%); color: #ffffff; padding: 18px 24px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-certificate" style="font-size: 1.4rem;"></i>
+            <span style="font-size: 1rem; font-weight: 700;">Participation Certificate</span>
           </div>
           <div style="padding: 28px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
-              <div style="font-size: 0.82rem; font-weight: 700; color: var(--c-deep-teal); text-transform: uppercase; margin-bottom: 4px;">Award Device</div>
-              <h3 style="font-size: 1.6rem; color: var(--c-deep-blue); margin-bottom: 10px;">Tablet</h3>
-              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
-                Conferred upon the participant demonstrating outstanding engagement and verified cancer prevention outreach across Gorakhpur.
+              <p style="font-size: 0.9rem; color: var(--text-body); line-height: 1.65; margin-bottom: 16px;">
+                Every registered delegate who actively participates in the MMMUT cancer awareness drive receives an official HPPCHRI Participation Certificate issued in their name.
               </p>
             </div>
             <div style="padding-top: 14px; border-top: 1px dashed var(--border-medium); font-size: 0.82rem; color: var(--c-deep-teal); font-weight: 600;">
-              Judged on verified impressions &amp; clinical screening pledges
+              Verifiable with your unique Delegate Pass ID
             </div>
           </div>
         </div>
 
-        <!-- 1st Prize Grand Champion Card (Elevated) -->
-        <div class="prize-podium-card" style="background: #ffffff; border-radius: var(--border-radius-lg); border: 2px solid var(--c-mint); overflow: hidden; box-shadow: var(--shadow-mint); display: flex; flex-direction: column; transform: translateY(-6px);">
-          <div style="background: linear-gradient(135deg, var(--c-deep-blue) 0%, var(--primary-deep) 100%); color: #ffffff; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; background: var(--c-cream); color: #033f58; padding: 4px 12px; border-radius: var(--border-radius-full);">Rank 1</span>
-            <span style="font-size: 0.88rem; font-weight: 700; color: var(--c-mint);">Grand Champion</span>
+        <!-- Campaign Recognition Memento Card -->
+        <div class="prize-podium-card" style="background: #ffffff; border-radius: var(--border-radius-lg); border: 2px solid var(--c-mint); overflow: hidden; box-shadow: var(--shadow-mint); display: flex; flex-direction: column;">
+          <div style="background: linear-gradient(135deg, var(--c-deep-blue) 0%, var(--primary-deep) 100%); color: #ffffff; padding: 18px 24px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-award" style="font-size: 1.4rem; color: var(--c-mint);"></i>
+            <span style="font-size: 1rem; font-weight: 700;">Campaign Recognition Memento</span>
           </div>
-          <div style="padding: 30px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(180deg, #ffffff 0%, #f7fdfc 100%);">
+          <div style="padding: 28px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(180deg, #ffffff 0%, #f7fdfc 100%);">
             <div>
-              <div style="font-size: 0.84rem; font-weight: 700; color: var(--c-teal); text-transform: uppercase; margin-bottom: 4px;">Grand Prize Device</div>
-              <h3 style="font-size: 1.85rem; color: var(--c-deep-blue); margin-bottom: 12px;">Premium Laptop</h3>
-              <p style="font-size: 0.9rem; color: var(--text-body); line-height: 1.65; margin-bottom: 18px;">
-                Awarded to the City-Wide Awareness Champion whose campaign content achieves the highest verified public reach, educating communities on early warning signs.
+              <p style="font-size: 0.9rem; color: var(--text-body); line-height: 1.65; margin-bottom: 16px;">
+                Selected contributors who demonstrate outstanding awareness outreach — through impactful content, peer education, or on-ground screening participation — will be recognized with a campaign memento and official commendation from HPPCHRI.
               </p>
             </div>
-            <div style="padding-top: 16px; border-top: 1.5px solid var(--c-mint); font-size: 0.84rem; color: var(--primary-deep); font-weight: 700; background: #eefcf8; padding: 10px 14px; border-radius: var(--border-radius-sm);">
-              Includes City-Wide Champion Trophy &amp; Official Hospital Citation
+            <div style="padding-top: 14px; border-top: 1.5px solid var(--c-mint); font-size: 0.82rem; color: var(--primary-deep); font-weight: 700; background: #eefcf8; padding: 10px 14px; border-radius: var(--border-radius-sm);">
+              Judged on awareness impact &amp; verified outreach quality
             </div>
           </div>
         </div>
 
-        <!-- 3rd Prize Card -->
+        <!-- Awareness Champion Recognition Card -->
         <div class="prize-podium-card" style="background: #ffffff; border-radius: var(--border-radius-lg); border: 2px solid var(--border-subtle); overflow: hidden; box-shadow: var(--shadow-md); display: flex; flex-direction: column;">
-          <div style="background: linear-gradient(135deg, var(--c-deep-teal) 0%, var(--c-teal) 100%); color: #ffffff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: var(--border-radius-full);">Rank 3</span>
-            <span style="font-size: 0.85rem; font-weight: 600;">Second Runner-Up</span>
+          <div style="background: linear-gradient(135deg, var(--c-deep-teal) 0%, var(--c-teal) 100%); color: #ffffff; padding: 18px 24px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-ribbon" style="font-size: 1.4rem;"></i>
+            <span style="font-size: 1rem; font-weight: 700;">Awareness Champion Recognition</span>
           </div>
           <div style="padding: 28px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
-              <div style="font-size: 0.82rem; font-weight: 700; color: var(--c-deep-teal); text-transform: uppercase; margin-bottom: 4px;">Award Device</div>
-              <h3 style="font-size: 1.6rem; color: var(--c-deep-blue); margin-bottom: 10px;">Smartwatch</h3>
               <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
-                Bestowed for creative, scientifically accurate storytelling on tobacco de-addiction and cancer symptom identification.
+                Participants who create scientifically accurate cancer awareness content and encourage early screening — in accordance with Yuva Sanchar campaign guidelines — are eligible for special awareness champion recognition.
               </p>
             </div>
             <div style="padding-top: 14px; border-top: 1px dashed var(--border-medium); font-size: 0.82rem; color: var(--c-deep-teal); font-weight: 600;">
-              Judged on narrative impact &amp; peer engagement
+              Based on judging criteria applicable to the MMMUT campaign
             </div>
           </div>
         </div>
 
-      </div>
-
-      <!-- Redesigned Top 1% Model Showcase Matrix -->
-      <div style="margin-top: 16px;">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <h3 style="font-size: 1.45rem; color: var(--c-deep-blue); margin-bottom: 6px;">The Top 1% Selection &amp; Recognition Framework</h3>
-          <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 680px; margin: 0 auto;">
-            Ensuring every participant category competes within its own cohort for transparent and fair recognition.
-          </p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
-          
-          <!-- Category 1 -->
-          <div class="award-framework-card" style="background: #ffffff; border-radius: var(--border-radius-md); padding: 24px; border: 1.5px solid var(--border-subtle); box-shadow: var(--shadow-sm); border-top: 4px solid var(--c-deep-teal);">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--c-deep-teal); text-transform: uppercase; margin-bottom: 6px;">150+ Colleges &amp; Universities</div>
-            <h4 style="font-size: 1.15rem; color: var(--c-deep-blue); margin-bottom: 8px;">College Achievers</h4>
-            <div style="font-size: 1.4rem; font-weight: 800; color: var(--c-deep-teal); margin-bottom: 8px;">1,800 Students</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
-              Top 1% of the 180,000 students reached receive official HPPCHRI Recognition Goodies and certified credentials.
-            </p>
-          </div>
-
-          <!-- Category 2 -->
-          <div class="award-framework-card" style="background: #ffffff; border-radius: var(--border-radius-md); padding: 24px; border: 1.5px solid var(--border-subtle); box-shadow: var(--shadow-sm); border-top: 4px solid var(--c-teal);">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--c-teal); text-transform: uppercase; margin-bottom: 6px;">1,500+ Schools</div>
-            <h4 style="font-size: 1.15rem; color: var(--c-deep-blue); margin-bottom: 8px;">Student Achievers</h4>
-            <div style="font-size: 1.4rem; font-weight: 800; color: var(--c-teal); margin-bottom: 8px;">1,500 Students</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
-              Top 1% of the 150,000 school students reached receive student awareness medals, stationery kits, and certificates.
-            </p>
-          </div>
-
-          <!-- Category 3 -->
-          <div class="award-framework-card" style="background: #ffffff; border-radius: var(--border-radius-md); padding: 24px; border: 1.5px solid var(--border-subtle); box-shadow: var(--shadow-sm); border-top: 4px solid var(--c-mint);">
-            <div style="font-size: 0.8rem; font-weight: 700; color: #028090; text-transform: uppercase; margin-bottom: 6px;">10,000+ Followers Benchmark</div>
-            <h4 style="font-size: 1.15rem; color: var(--c-deep-blue); margin-bottom: 8px;">Creator Achievers</h4>
-            <div style="font-size: 1.4rem; font-weight: 800; color: #028090; margin-bottom: 8px;">Top 5 Creators</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
-              Verified social media creators judged exclusively within their own tier receive premium recognition kits and creator trophies.
-            </p>
-          </div>
-
-          <!-- Category 4 -->
-          <div class="award-framework-card" style="background: #ffffff; border-radius: var(--border-radius-md); padding: 24px; border: 1.5px solid var(--border-subtle); box-shadow: var(--shadow-sm); border-top: 4px solid var(--c-deep-blue);">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--c-deep-blue); text-transform: uppercase; margin-bottom: 6px;">20 Community Co-Hosts</div>
-            <h4 style="font-size: 1.15rem; color: var(--c-deep-blue); margin-bottom: 8px;">Partner Clubs</h4>
-            <div style="font-size: 1.4rem; font-weight: 800; color: var(--c-deep-blue); margin-bottom: 8px;">Institutional Honors</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
-              Official Memento presented to each institute, display banner for club headquarters, and 5 awareness posters per member.
-            </p>
-          </div>
-
-        </div>
       </div>
 
       <!-- Verification Guidelines Callout -->
@@ -1051,8 +985,8 @@
         <div>
           <h4 style="color: var(--primary-deep); font-size: 1.05rem; margin-bottom: 4px;">How to Make Your Awareness Entry Verifiable:</h4>
           <p style="font-size: 0.88rem; color: var(--text-dark);">
-            1. <strong>Register</strong> on this portal before posting. &bull; 
-            2. <strong>Tag</strong> our official hospital handle (<code>@hppcancerhospital</code> / <code>@hppchri</code>). &bull; 
+            1. <strong>Register</strong> on this portal before posting. &bull;
+            2. <strong>Tag</strong> our official hospital handle (<code>@hppcancerhospital</code> / <code>@hppchri</code>). &bull;
             3. Use the official hashtags: <code>#YuvaSanchar</code> <code>#HPPCHRI50</code> <code>#KnowCheckAct</code>.
           </p>
         </div>
@@ -1060,6 +994,8 @@
       </div>
     </div>
   </section>
+
+
 
   <!-- 6. Hospital Facilities & Oncology Infrastructure -->
   <section class="section" id="facilities">
@@ -1215,12 +1151,10 @@
             </div>
           </div>
           <div class="patron-body">
-            <p class="patron-quote">
-              “The most effective way to fight a serious disease like cancer is timely diagnosis, awareness and appropriate treatment. This collective effort will help establish Gorakhpur as a model city in cancer prevention and treatment.”
-            </p>
             <div class="patron-hindi">
-              “मुझे यह जानकर अत्यंत हर्ष हो रहा है कि पूर्वांचल के युवाओं, विशेषकर गोरखपुर में... संयुक्त रूप से कैंसर जागरूकता अभियान संचालित किया जा रहा है, और एक लघु पुस्तिका ‘युवा संचार’ का प्रकाशन किया जा रहा है।”
+              “मुझे यह जानकर अत्यंत हर्ष हो रहा है कि पूर्वांचल के युवाओं, विशेषकर गोरखपुर में, दीनदयाल उपाध्याय गोरखपुर विश्वविद्यालय, हनुमान प्रसाद पोद्दार कैंसर अस्पताल एवं शोध संस्थान, एम्स-गोरखपुर, बी.आर.डी. मेडिकल कॉलेज, श्री गोरक्षनाथ मेडिकल कॉलेज, स्वास्थ्य विभाग समेत अनेक संस्थाओं द्वारा संयुक्त रूप से कैंसर जागरूकता अभियान संचालित किया जा रहा है, और एक लघु पुस्तिका ‘युवा संचार’ का प्रकाशन किया जा रहा है।”
             </div>
+            <div style="margin-top: 12px; font-size: 0.88rem; color: var(--text-muted); font-weight: 600;">— आनंदीबेन पटेल, राज्यपाल, उत्तर प्रदेश</div>
           </div>
         </div>
 
@@ -1237,12 +1171,10 @@
             </div>
           </div>
           <div class="patron-body">
-            <p class="patron-quote">
-              “‘Nar Seva–Narayan Seva’ was the guiding motto of Bhaiji Shri Hanuman Prasad Poddar. In his memory, the hospital continues this commendable work of service to society, and the Cancer Awareness Campaign in its Golden Jubilee year is highly commendable.”
-            </p>
             <div class="patron-hindi">
-              “अपनी 50 वर्ष की सेवा यात्रा को जारी रखते हुए संस्थान द्वारा स्वर्ण जयंती वर्ष में ‘कैंसर जागरूकता अभियान’ का संचालन सराहनीय है। मुझे विश्वास है कि इसके माध्यम से लोगों को प्रारंभिक लक्षण, बचाव व समय से उपचार की उपयोगी जानकारी प्राप्त होगी।”
+              “मुझे यह जानकर अत्यंत प्रसन्नता की अनुभूति हो रही है कि हनुमान प्रसाद पोद्दार कैंसर अस्पताल एवं शोध संस्थान, गीता वाटिका, गोरखपुर की स्थापना के 50 वर्ष पूर्ण होने के अवसर पर ‘कैंसर जागरूकता अभियान’ संचालित किया जा रहा है। कैंसर जैसी गंभीर बीमारी के निदान के लिए उचित मार्गदर्शन और समय से उपचार अति आवश्यक है। जागरूकता के माध्यम से लोगों को कैंसर से बचाव और इसके प्रारम्भिक लक्षणों की पहचान की जानकारी सकारात्मक परिणाम दे सकती है।”
             </div>
+            <div style="margin-top: 12px; font-size: 0.88rem; color: var(--text-muted); font-weight: 600;">— योगी आदित्यनाथ, मुख्यमंत्री, उत्तर प्रदेश</div>
           </div>
         </div>
       </div>
@@ -1307,7 +1239,7 @@
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <button id="view-booklet-btn" class="btn btn-outline-teal">
-            <i class="fa-solid fa-book-open"></i> Read Highlights
+            <i class="fa-solid fa-book-open"></i> Read Full Brochure / पूरी पुस्तिका पढ़ें
           </button>
           <a href="#register" class="btn btn-mint">
             <i class="fa-solid fa-signature"></i> Register as Delegate
@@ -1335,10 +1267,11 @@
           <div class="footer-social-wrapper">
             <span>Connect With Us</span>
             <div class="social-links">
-              <a href="https://www.instagram.com/hppcancerhospital/" target="_blank" rel="noopener" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-              <a href="https://www.facebook.com/hppchri" target="_blank" rel="noopener" class="social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-              <a href="https://in.linkedin.com/company/hppchri" target="_blank" rel="noopener" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-              <a href="https://www.youtube.com/@hppchri" target="_blank" rel="noopener" class="social-icon" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+              <a href="https://www.instagram.com/hppcancerhospital/" target="_blank" rel="noopener" class="social-icon" title="Instagram" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.facebook.com/hppchri" target="_blank" rel="noopener" class="social-icon" title="Facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://in.linkedin.com/company/hppchri" target="_blank" rel="noopener" class="social-icon" title="LinkedIn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="https://www.youtube.com/@hppchri" target="_blank" rel="noopener" class="social-icon" title="YouTube" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+              <a href="https://whatsapp.com/channel/0029Vb8jh6fChq6TwF2FrB2b" target="_blank" rel="noopener" class="social-icon" title="WhatsApp Channel" aria-label="WhatsApp Channel"><i class="fa-brands fa-whatsapp"></i></a>
             </div>
           </div>
         </div>
@@ -1439,50 +1372,49 @@
     </div>
   </div>
 
-  <!-- Yuva Sanchar Booklet Highlights Modal -->
-  <div class="modal-overlay" id="booklet-modal-overlay">
-    <div class="modal-container">
-      <div class="modal-header">
-        <h3>लघु पुस्तिका ‘युवा संचार’ — मुख्य अंश</h3>
+  <!-- Yuva Sanchar Full Brochure PDF Modal -->
+  <div class="modal-overlay" id="booklet-modal-overlay" style="align-items:flex-start;padding:16px;">
+    <div class="modal-container" style="width:100%;max-width:960px;height:92vh;display:flex;flex-direction:column;margin:0 auto;border-radius:var(--border-radius-lg);overflow:hidden;">
+      <div class="modal-header" style="flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;">
+        <h3 style="font-size:1rem;margin:0;">
+          <i class="fa-solid fa-book-open" style="color:var(--c-teal);margin-right:8px;"></i>
+          युवा संचार — पूरी पुस्तिका &nbsp;|&nbsp; Yuva Sanchar — Full Brochure (20 Pages)
+        </h3>
         <button class="modal-close-btn" id="booklet-modal-close">&times;</button>
       </div>
-      <div class="modal-body" style="font-size: 0.95rem; line-height: 1.7;">
-        <h4 style="color: var(--c-deep-blue); margin-bottom: 8px;">जागो युवा - बदलो ज़िंदगी (A Youth Health Initiative)</h4>
-        <p style="margin-bottom: 16px; color: var(--text-body);">
-          यह पुस्तिका हनुमान प्रसाद पोद्दार कैंसर अस्पताल एवं शोध संस्थान द्वारा पूर्वांचल के युवाओं में स्वास्थ्य, जीवनशैली और साइबर सुरक्षा की चेतना जगाने के लिए प्रकाशित की गई है।
-        </p>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-          <div style="background: #f7fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-            <strong style="color: var(--c-deep-teal);">1. तंबाकू एवं मुख कैंसर</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">निकोटीन लत का फेगरस्ट्रॉम स्कोर, मुंह के छाले व प्रारंभिक गांठ की पहचान।</p>
-          </div>
-          <div style="background: #f7fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-            <strong style="color: var(--c-deep-teal);">2. स्तन एवं गर्भाशय ग्रीवा कैंसर</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">मासिक स्व-परीक्षण (BSE), मैमोग्राफी तथा बालिकाओं के लिए HPV टीकाकरण।</p>
-          </div>
-          <div style="background: #f7fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-            <strong style="color: var(--c-deep-teal);">3. पोषण, एनीमिया व मानसिक स्वास्थ्य</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">आयरन युक्त आहार, मासिक धर्म स्वच्छता, तनाव प्रबंधन व अवसाद से बचाव।</p>
-          </div>
-          <div style="background: #f7fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-            <strong style="color: var(--c-deep-teal);">4. साइबर जागरूकता (गोरखपुर पुलिस)</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">डिजिटल अरेस्ट, लोन ऐप फ्रॉड और ऑनलाइन ब्लैकमेलिंग से सुरक्षा सूत्र।</p>
-          </div>
-        </div>
-
-        <div style="text-align: center; padding: 16px; background: var(--teal-light); border-radius: 8px; color: #028090;">
-          📞 <strong>निःशुल्क सहायता हेतु संपर्क करें:</strong> 1800 890 7526 / 9721526808
-        </div>
-      </div>
-      <div class="modal-footer">
-        <a href="#register" class="btn btn-primary" onclick="document.getElementById('booklet-modal-overlay').classList.remove('active');">
-          अभियान से जुड़ें (Register)
+      <div style="flex-shrink:0;background:var(--teal-light);padding:7px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border-subtle);">
+        <span style="font-size:0.8rem;color:var(--primary-deep);">
+          <i class="fa-solid fa-file-pdf" style="color:#c0392b;"></i>&nbsp; YUVA SANCHAR-content.pdf &bull; 20 Pages
+        </span>
+        <a href="YUVA SANCHAR-content.pdf" target="_blank" rel="noopener" class="btn btn-outline-teal" style="padding:5px 12px;font-size:0.8rem;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in New Tab / नई विंडो में खोलें
         </a>
+      </div>
+      <div style="flex:1;overflow:hidden;background:#525659;min-height:0;">
+        <iframe src="YUVA SANCHAR-content.pdf" style="width:100%;height:100%;border:none;display:block;" title="Yuva Sanchar Full Brochure">
+          <p style="padding:24px;color:#fff;text-align:center;">
+            <a href="YUVA SANCHAR-content.pdf" target="_blank" style="color:#02c39a;">पूरी पुस्तिका खोलें / Open full brochure</a>
+          </p>
+        </iframe>
+      </div>
+      <div class="modal-footer" style="flex-shrink:0;padding:10px 20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="#register" class="btn btn-mint" onclick="document.getElementById('booklet-modal-overlay').classList.remove('active');">
+          <i class="fa-solid fa-user-plus"></i> Register / अभियान से जुड़ें
+        </a>
+        <button class="btn btn-outline-teal" id="booklet-modal-close-footer" onclick="document.getElementById('booklet-modal-overlay').classList.remove('active');">
+          <i class="fa-solid fa-xmark"></i> Close / बंद करें
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- QR Code Library (real, scannable) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <!-- QRCode.js wrapper -->
+  <script>
+    // Signal custom event when qrcode-generator is ready (for fallback retry)
+    window.dispatchEvent(new Event('qrcode-ready'));
+  </script>
   <!-- Scripts -->
   <script src="js/quiz.js"></script>
   <script src="js/registration.js"></script>

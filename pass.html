@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delegate Pass Verification — HPPCHRI Yuva Sanchar</title>
+  <meta name="description" content="Official delegate pass verification for the HPPCHRI Yuva Sanchar Campaign." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <style>
+    body { font-family:'Inter',sans-serif; background:#f0f4f8; min-height:100vh;
+           display:flex; flex-direction:column; align-items:center;
+           justify-content:flex-start; padding:32px 16px; }
+    .verify-card { background:#fff; border-radius:20px; box-shadow:0 8px 40px rgba(5,102,141,.13);
+                   max-width:540px; width:100%; overflow:hidden; }
+    .verify-header { background:linear-gradient(135deg,#05668d 0%,#028090 60%,#00a896 100%);
+                     color:#fff; padding:28px 32px; text-align:center; }
+    .verify-header h1 { font-size:1.3rem; font-weight:800; margin:0 0 4px; }
+    .verify-header p  { font-size:0.85rem; opacity:.85; margin:0; }
+    .verify-body   { padding:28px 32px; }
+    .status-badge  { display:inline-flex; align-items:center; gap:8px; padding:8px 18px;
+                     border-radius:50px; font-weight:700; font-size:0.9rem; margin-bottom:20px; }
+    .status-found   { background:#eefcf8; color:#028090; border:2px solid #02c39a; }
+    .status-missing { background:#fff0f0; color:#c0392b; border:2px solid #e74c3c; }
+    .status-loading { background:#f0f8ff; color:#05668d; border:2px solid #05668d; }
+    .field-row { display:flex; gap:8px; margin-bottom:10px; padding-bottom:10px;
+                 border-bottom:1px solid #eef2f7; }
+    .field-row:last-child { border-bottom:none; }
+    .field-label { font-size:.75rem; font-weight:700; color:#5b7083;
+                   text-transform:uppercase; min-width:130px; }
+    .field-value { font-size:.9rem; font-weight:600; color:#033f58; }
+    .reg-id-box  { background:#eefcf8; border:2px solid #02c39a; border-radius:10px;
+                   padding:14px 18px; margin-bottom:20px; text-align:center; }
+    .reg-id-box .label { font-size:.7rem; font-weight:700; color:#028090;
+                          text-transform:uppercase; letter-spacing:.07em; }
+    .reg-id-box .value { font-size:1.4rem; font-weight:800; color:#05668d;
+                          font-family:monospace; letter-spacing:.06em; }
+    .qr-area { text-align:center; margin:16px 0; }
+    .note { background:#f0f8ff; border-left:3px solid #028090; padding:10px 14px;
+            border-radius:4px; font-size:.8rem; color:#033f58; line-height:1.55; margin-top:16px; }
+    .btn-back { display:inline-flex; align-items:center; gap:8px; padding:10px 22px;
+                background:#05668d; color:#fff; border:none; border-radius:50px;
+                font-weight:700; cursor:pointer; text-decoration:none;
+                font-size:.9rem; margin-top:20px; }
+    .btn-back:hover { background:#028090; }
+    .verify-footer { text-align:center; padding:18px; font-size:.75rem;
+                     color:#5b7083; border-top:1px solid #eef2f7; }
+    @media print { body{background:#fff;padding:0;} .btn-back,.note{display:none;} }
+  </style>
+</head>
+<body>
+<div class="verify-card">
+  <div class="verify-header">
+    <div style="font-size:1.5rem;margin-bottom:8px;"><i class="fa-solid fa-id-card"></i></div>
+    <h1>Delegate Pass Verification</h1>
+    <p>HPPCHRI • Yuva Sanchar — Cancer Awareness Campaign</p>
+  </div>
+  <div class="verify-body" id="verify-body">
+    <div class="status-badge status-loading">
+      <i class="fa-solid fa-spinner fa-spin"></i> Verifying registration…
+    </div>
+  </div>
+  <div class="verify-footer">
+    Hanuman Prasad Poddar Cancer Hospital &amp; Research Institute, Gorakhpur •
+    <strong>HPPCHRI</strong> • Estd. 1975 • Golden Jubilee 2026
+  </div>
+</div>
+
+<script>
+// ── Config ── change for production ──────────────────────────────────
+const API_BASE_URL = 'http://localhost:5000';
+const VERIFY_BASE  = window.location.origin + window.location.pathname.replace(/\/[^/]*$/,'');
+
+function esc(s){ if(!s)return''; return String(s).replace(/[&<>"']/g,
+  t=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[t]||t)); }
+
+function renderQr(regId, el){
+  el.innerHTML='';
+  const payload=`${VERIFY_BASE}/pass.html?id=${encodeURIComponent(regId)}`;
+  if(typeof QRCode!=='undefined'){
+    new QRCode(el,{text:payload,width:120,height:120,colorDark:'#05668d',
+      colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+  }
+}
+
+function catLabel(cat){
+  return {student:'Student Delegate',club:'Club Member Ambassador',
+          influencer:'Verified Digital Creator',citizen:'Community Health Advocate'}[cat]||'Campaign Delegate';
+}
+
+function renderFound(d){
+  const body=document.getElementById('verify-body');
+  const qrId='qr-'+Date.now();
+  body.innerHTML=`
+    <div class="status-badge status-found">
+      <i class="fa-solid fa-circle-check"></i>
+      Valid Registered Delegate / पंजीकृत प्रतिनिधि
+    </div>
+    <div class="reg-id-box">
+      <div class="label">Registration ID / पंजीकरण संख्या</div>
+      <div class="value">${esc(d.registrationId)}</div>
+    </div>
+    <div class="field-row"><span class="field-label">Name</span>
+      <span class="field-value">${esc(d.fullName)}</span></div>
+    <div class="field-row"><span class="field-label">Category</span>
+      <span class="field-value">${catLabel(d.category)}</span></div>
+    <div class="field-row"><span class="field-label">Affiliation</span>
+      <span class="field-value">${esc(d.institution)}</span></div>
+    <div class="field-row"><span class="field-label">City</span>
+      <span class="field-value">${esc(d.city)}</span></div>
+    <div class="field-row"><span class="field-label">Registered On</span>
+      <span class="field-value">${esc(d.regDate)}</span></div>
+    <div class="qr-area"><div id="${qrId}"></div>
+      <div style="font-size:.7rem;color:#5b7083;margin-top:6px;">Scan to open this page</div>
+    </div>
+    <div class="note">
+      ✅ This delegate has successfully registered for the
+      <strong>Yuva Sanchar Cancer Awareness Campaign</strong> at HPPCHRI, Gorakhpur.<br>
+      <em style="color:#5b7083;">यह प्रतिनिधि युवा संचार कैंसर जागरूकता अभियान में सफलतापूर्वक पंजीकृत है।</em>
+    </div>
+    <a href="index.html" class="btn-back">
+      <i class="fa-solid fa-arrow-left"></i> Back to Campaign Website
+    </a>`;
+  const el=document.getElementById(qrId);
+  if(el) renderQr(d.registrationId, el);
+}
+
+function renderNotFound(regId){
+  document.getElementById('verify-body').innerHTML=`
+    <div class="status-badge status-missing">
+      <i class="fa-solid fa-circle-xmark"></i> Registration Not Found / पंजीकरण नहीं मिला
+    </div>
+    <p style="color:#5b7083;font-size:.9rem;">
+      No record found for Registration ID: <strong>${esc(regId)}</strong>
+    </p>
+    <div class="note">
+      If you believe this is an error, please contact the campaign coordinators.<br>
+      <em>यदि आपको लगता है कि यह एक त्रुटि है, तो कृपया अभियान समन्वयकों से संपर्क करें।</em>
+    </div>
+    <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Campaign Website</a>`;
+}
+
+function renderError(msg){
+  document.getElementById('verify-body').innerHTML=`
+    <div class="status-badge status-missing">
+      <i class="fa-solid fa-triangle-exclamation"></i> Verification Error
+    </div>
+    <p style="color:#5b7083;font-size:.9rem;">${esc(msg)}</p>
+    <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Campaign Website</a>`;
+}
+
+// ── Main ──────────────────────────────────────────────────────────
+(async()=>{
+  const params = new URLSearchParams(window.location.search);
+  const regId  = params.get('id');
+
+  if(!regId){
+    renderError('No Registration ID provided. Please scan the QR code on your delegate pass.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/registrations/${encodeURIComponent(regId)}`);
+    const json = await res.json();
+
+    if(res.status===404||!json.success){
+      renderNotFound(regId);
+    } else {
+      renderFound(json.data);
+    }
+  } catch(err){
+    renderError('Could not reach the verification server. Please check your internet connection.');
+  }
+})();
+</script>
+</body>
+</html>

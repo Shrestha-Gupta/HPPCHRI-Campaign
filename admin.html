@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — HPPCHRI Campaign</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Layout ─────────────────────────────────────────────────── */
+    body { font-family:'Inter',sans-serif; background:#0a1628; min-height:100vh;
+           display:flex; flex-direction:column; color:#e2e8f0; }
+    .admin-wrap { flex:1; display:flex; flex-direction:column; }
+
+    /* ── Top bar ─────────────────────────────────────────────────── */
+    .admin-topbar { background:linear-gradient(135deg,#05668d,#028090);
+                    padding:12px 28px; display:flex; align-items:center;
+                    justify-content:space-between; box-shadow:0 2px 12px rgba(0,0,0,.3); }
+    .admin-topbar .brand { display:flex; align-items:center; gap:10px;
+                           font-weight:800; font-size:1rem; color:#fff; text-decoration:none; }
+    .admin-topbar .brand img { height:36px; border-radius:4px; }
+    .admin-topbar .topbar-actions { display:flex; align-items:center; gap:12px; }
+    #logout-btn { display:none; padding:7px 16px; background:rgba(255,255,255,.15);
+                  border:1px solid rgba(255,255,255,.3); border-radius:50px;
+                  color:#fff; cursor:pointer; font-weight:600; font-size:0.85rem; }
+    #logout-btn:hover { background:rgba(255,255,255,.25); }
+
+    /* ── Login panel ─────────────────────────────────────────────── */
+    #login-panel { max-width:420px; margin:60px auto; padding:0 16px; width:100%; }
+    .login-card { background:#111f35; border:1px solid #1e3a5f;
+                  border-radius:20px; padding:36px; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+    .login-card h1 { font-size:1.4rem; font-weight:800; color:#fff;
+                     margin:0 0 4px; text-align:center; }
+    .login-card .subtitle { text-align:center; color:#7fa4c4; font-size:0.85rem; margin-bottom:28px; }
+    .form-field { margin-bottom:18px; }
+    .form-field label { display:block; font-size:0.8rem; font-weight:600;
+                        color:#7fa4c4; margin-bottom:6px; }
+    .form-field input { width:100%; padding:11px 14px; background:#0d1b2e;
+                        border:1.5px solid #1e3a5f; border-radius:10px;
+                        color:#e2e8f0; font-size:0.95rem; box-sizing:border-box;
+                        transition:border-color .2s; }
+    .form-field input:focus { outline:none; border-color:#028090; }
+    #login-btn { width:100%; padding:12px; background:linear-gradient(135deg,#02c39a,#028090);
+                 border:none; border-radius:50px; color:#ffffff; font-weight:700;
+                 font-size:1rem; cursor:pointer; margin-top:8px; transition:opacity .2s; }
+    #login-btn:hover { opacity:.9; }
+    #login-btn:disabled { opacity:.55; cursor:not-allowed; }
+    #login-error { color:#fc8181; font-size:0.83rem; text-align:center;
+                   margin-top:12px; display:none; }
+    .login-footer { text-align:center; font-size:0.75rem; color:#4a6080;
+                    margin-top:24px; }
+
+    /* ── Dashboard ───────────────────────────────────────────────── */
+    #dashboard-panel { display:none; padding:24px 20px 40px; max-width:1280px;
+                       margin:0 auto; width:100%; }
+    .dash-title { font-size:1.3rem; font-weight:800; color:#fff;
+                  margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+    .dash-title i { color:#02c39a; }
+
+    /* Summary cards */
+    .summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+                    gap:14px; margin-bottom:28px; }
+    .sum-card { background:#111f35; border:1px solid #1e3a5f; border-radius:14px;
+                padding:18px 16px; text-align:center; }
+    .sum-card .num { font-size:2rem; font-weight:800; color:#02c39a; }
+    .sum-card .lbl { font-size:0.78rem; color:#7fa4c4; margin-top:4px; }
+
+    /* Filter bar */
+    .filter-bar { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; align-items:center; }
+    .filter-bar input, .filter-bar select {
+      padding:8px 12px; background:#111f35; border:1.5px solid #1e3a5f;
+      border-radius:8px; color:#e2e8f0; font-size:0.85rem; }
+    .filter-bar input:focus, .filter-bar select:focus { outline:none; border-color:#028090; }
+    .filter-bar input { flex:1; min-width:200px; }
+    .filter-bar .btn-filter { padding:8px 18px; background:#028090; border:none;
+                               border-radius:8px; color:#fff; font-weight:600;
+                               cursor:pointer; font-size:0.85rem; }
+    .btn-add { padding:8px 18px; background:#02c39a; border:none; border-radius:8px;
+               color:#033f58; font-weight:700; cursor:pointer; font-size:0.85rem;
+               margin-left:auto; }
+
+    /* Table */
+    .table-wrap { background:#111f35; border:1px solid #1e3a5f; border-radius:14px;
+                  overflow:auto; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; min-width:750px; }
+    thead th { background:#0d1b2e; color:#7fa4c4; font-weight:600; font-size:0.75rem;
+               text-transform:uppercase; letter-spacing:.04em; padding:12px 14px;
+               text-align:left; position:sticky; top:0; }
+    tbody tr { border-bottom:1px solid #1a2f4a; cursor:pointer;
+               transition:background .15s; }
+    tbody tr:hover { background:#162440; }
+    tbody td { padding:11px 14px; color:#cbd5e1; vertical-align:middle; }
+    .reg-id-cell { font-family:monospace; font-weight:700; color:#02c39a; font-size:0.8rem; }
+    .cat-badge { display:inline-block; padding:3px 9px; border-radius:50px;
+                 font-size:0.72rem; font-weight:700; text-transform:uppercase; }
+    .cat-student    { background:#0d3a2a; color:#02c39a; }
+    .cat-club       { background:#1a2f4a; color:#60a5fa; }
+    .cat-influencer { background:#2a1a3a; color:#c084fc; }
+    .cat-citizen    { background:#2a2a1a; color:#fbbf24; }
+
+    .action-btns { display:flex; gap:6px; }
+    .btn-view   { padding:4px 10px; background:#1e3a5f; border:none; border-radius:6px;
+                  color:#7fa4c4; cursor:pointer; font-size:0.75rem; }
+    .btn-delete { padding:4px 10px; background:#3a1a1a; border:none; border-radius:6px;
+                  color:#fc8181; cursor:pointer; font-size:0.75rem; }
+    .btn-view:hover   { background:#28507a; }
+    .btn-delete:hover { background:#5a2020; }
+
+    /* Pagination */
+    .pagination { display:flex; gap:8px; justify-content:center; margin-top:16px;
+                  flex-wrap:wrap; }
+    .pagination button { padding:6px 14px; background:#111f35; border:1px solid #1e3a5f;
+                         border-radius:8px; color:#7fa4c4; cursor:pointer; font-size:0.83rem; }
+    .pagination button.active { background:#028090; color:#fff; border-color:#028090; }
+
+    /* ── Modals ──────────────────────────────────────────────────── */
+    .modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7);
+                      z-index:9999; overflow-y:auto; padding:20px; }
+    .modal-backdrop.open { display:flex; align-items:flex-start; justify-content:center; }
+    .modal-box { background:#111f35; border:1px solid #1e3a5f; border-radius:18px;
+                 max-width:640px; width:100%; padding:28px; box-shadow:0 30px 80px rgba(0,0,0,.5);
+                 margin:auto; position:relative; }
+    .modal-box h2 { font-size:1.1rem; font-weight:800; color:#fff; margin:0 0 20px; }
+    .modal-close { position:absolute; top:16px; right:18px; background:none; border:none;
+                   color:#7fa4c4; font-size:1.3rem; cursor:pointer; }
+    .detail-row { display:flex; gap:8px; margin-bottom:10px;
+                  border-bottom:1px solid #1a2f4a; padding-bottom:10px; }
+    .detail-row:last-child { border-bottom:none; margin-bottom:0; }
+    .detail-label { min-width:170px; font-size:0.75rem; font-weight:700;
+                    color:#7fa4c4; text-transform:uppercase; }
+    .detail-value { font-size:0.88rem; color:#e2e8f0; word-break:break-all; }
+    .detail-value.mono { font-family:monospace; color:#02c39a; font-size:1rem; }
+
+    .modal-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .modal-form-grid .full { grid-column:1/-1; }
+    .modal-field label { display:block; font-size:0.78rem; font-weight:600;
+                         color:#7fa4c4; margin-bottom:5px; }
+    .modal-field input, .modal-field select {
+      width:100%; padding:9px 12px; background:#0d1b2e; border:1.5px solid #1e3a5f;
+      border-radius:8px; color:#e2e8f0; font-size:0.88rem; box-sizing:border-box; }
+    .modal-field input:focus, .modal-field select:focus { outline:none; border-color:#028090; }
+    .modal-actions { display:flex; gap:10px; margin-top:20px; justify-content:flex-end; }
+    .btn-save   { padding:9px 22px; background:#02c39a; border:none; border-radius:8px;
+                  color:#033f58; font-weight:700; cursor:pointer; }
+    .btn-cancel { padding:9px 22px; background:#1e3a5f; border:none; border-radius:8px;
+                  color:#7fa4c4; font-weight:600; cursor:pointer; }
+    .btn-confirm-delete { padding:9px 22px; background:#e74c3c; border:none; border-radius:8px;
+                          color:#fff; font-weight:700; cursor:pointer; }
+
+    /* ── Toast ───────────────────────────────────────────────────── */
+    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+             background:#028090; color:#fff; padding:12px 22px; border-radius:50px;
+             font-weight:600; font-size:0.9rem; z-index:99999;
+             transition:transform .3s ease; pointer-events:none; white-space:nowrap; }
+    #toast.show { transform:translateX(-50%) translateY(0); }
+    #toast.error { background:#e74c3c; }
+
+    @media(max-width:600px){
+      .modal-form-grid { grid-template-columns:1fr; }
+      .filter-bar input { min-width:100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrap">
+
+  <!-- Top bar -->
+  <div class="admin-topbar">
+    <a href="index.html" class="brand">
+      <img src="assets/hppchri_logo.png" alt="HPPCHRI" />
+      HPPCHRI Admin
+    </a>
+    <div class="topbar-actions">
+      <span id="topbar-admin-id" style="font-size:.83rem;color:rgba(255,255,255,.65);"></span>
+      <button id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </div>
+
+  <!-- Login panel -->
+  <div id="login-panel">
+    <div class="login-card">
+      <div style="text-align:center;margin-bottom:18px;">
+        <i class="fa-solid fa-shield-halved" style="font-size:2.2rem;color:#02c39a;"></i>
+      </div>
+      <h1>Admin Login / एडमिन लॉगिन</h1>
+      <p class="subtitle">HPPCHRI Yuva Sanchar Campaign</p>
+      <form id="login-form" autocomplete="off">
+        <div class="form-field">
+          <label for="admin-id-input">Admin ID / एडमिन आईडी *</label>
+          <input type="text" id="admin-id-input" required autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="form-field">
+          <label for="admin-pass-input">Password / पासवर्ड *</label>
+          <input type="password" id="admin-pass-input" required autocomplete="off" />
+        </div>
+        <button type="submit" id="login-btn">
+          <i class="fa-solid fa-lock-open"></i> Login / लॉगिन
+        </button>
+        <div id="login-error"></div>
+      </form>
+      <div class="login-footer">
+        Secure admin access only. Unauthorized access is prohibited.
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard panel -->
+  <div id="dashboard-panel">
+    <div class="dash-title"><i class="fa-solid fa-chart-bar"></i> Admin Dashboard — Registrations</div>
+
+    <!-- Summary cards -->
+    <div class="summary-grid">
+      <div class="sum-card"><div class="num" id="sum-total">—</div><div class="lbl">Total</div></div>
+      <div class="sum-card"><div class="num" id="sum-today">—</div><div class="lbl">Today</div></div>
+      <div class="sum-card"><div class="num" id="sum-students">—</div><div class="lbl">Students</div></div>
+      <div class="sum-card"><div class="num" id="sum-clubs">—</div><div class="lbl">Club Members</div></div>
+      <div class="sum-card"><div class="num" id="sum-influencers">—</div><div class="lbl">Influencers</div></div>
+      <div class="sum-card"><div class="num" id="sum-citizens">—</div><div class="lbl">Citizens</div></div>
+    </div>
+
+    <!-- Filter + actions -->
+    <div class="filter-bar">
+      <input type="text" id="f-search" placeholder="Search by name, ID, phone, email…" />
+      <select id="f-category">
+        <option value="">All Categories</option>
+        <option value="student">Student</option>
+        <option value="club">Club Member</option>
+        <option value="influencer">Influencer</option>
+        <option value="citizen">Citizen</option>
+      </select>
+      <button class="btn-filter" onclick="loadRegistrations()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      <button class="btn-add" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Registration</button>
+      <button class="btn-filter" onclick="exportCsv()" style="background:#1e3a5f;">
+        <i class="fa-solid fa-file-csv"></i> Export CSV
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Registration ID</th>
+            <th>Name</th>
+            <th>WhatsApp</th>
+            <th>Category</th>
+            <th>Institution</th>
+            <th>City</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reg-tbody">
+          <tr><td colspan="8" style="text-align:center;padding:24px;color:#4a6080;">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+</div><!-- /admin-wrap -->
+
+<!-- ── Detail Modal ──────────────────────────────────────────────── -->
+<div class="modal-backdrop" id="detail-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('detail-modal')">&times;</button>
+    <h2><i class="fa-solid fa-id-card" style="color:#02c39a;margin-right:8px;"></i>Registration Details</h2>
+    <div id="detail-content"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('detail-modal')">Close</button>
+      <button class="btn-confirm-delete" id="detail-delete-btn">
+        <i class="fa-solid fa-trash"></i> Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Add Registration Modal ────────────────────────────────────── -->
+<div class="modal-backdrop" id="add-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('add-modal')">&times;</button>
+    <h2><i class="fa-solid fa-user-plus" style="color:#02c39a;margin-right:8px;"></i>Add Registration</h2>
+    <form id="add-form">
+      <div class="modal-form-grid">
+        <div class="modal-field full">
+          <label>Full Name *</label>
+          <input type="text" name="fullName" required />
+        </div>
+        <div class="modal-field">
+          <label>WhatsApp (10 digits) *</label>
+          <input type="text" name="phone" required pattern="[6-9][0-9]{9}" />
+        </div>
+        <div class="modal-field">
+          <label>Email</label>
+          <input type="email" name="email" />
+        </div>
+        <div class="modal-field">
+          <label>Category *</label>
+          <select name="category" required>
+            <option value="">Select</option>
+            <option value="student">Student</option>
+            <option value="club">Club Member</option>
+            <option value="influencer">Influencer</option>
+            <option value="citizen">Citizen</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>City</label>
+          <input type="text" name="city" placeholder="Gorakhpur" />
+        </div>
+        <div class="modal-field full">
+          <label>Institution / Organization</label>
+          <input type="text" name="institution" />
+        </div>
+        <div class="modal-field">
+          <label>Platform</label>
+          <input type="text" name="platform" placeholder="Instagram / YouTube" />
+        </div>
+        <div class="modal-field">
+          <label>Handle</label>
+          <input type="text" name="handle" placeholder="@username" />
+        </div>
+        <div class="modal-field">
+          <label>Followers</label>
+          <input type="number" name="followers" min="0" placeholder="0" />
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+        <input type="checkbox" id="add-pledge" name="pledgeAccepted" style="width:auto;" />
+        <label for="add-pledge" style="font-size:.82rem;color:#7fa4c4;">Pledge accepted</label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('add-modal')">Cancel</button>
+        <button type="submit" class="btn-save">
+          <i class="fa-solid fa-save"></i> Save Registration
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Confirm Delete Modal ─────────────────────────────────────── -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal-box" style="max-width:420px;">
+    <h2 style="color:#fc8181;"><i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete</h2>
+    <p style="color:#cbd5e1;margin-bottom:8px;">Are you sure you want to permanently delete this registration?</p>
+    <div id="delete-id-display" style="font-family:monospace;font-size:1.1rem;color:#fc8181;
+         background:#3a1a1a;padding:10px 16px;border-radius:8px;margin-bottom:20px;"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel / रद्द</button>
+      <button class="btn-confirm-delete" id="confirm-delete-btn">
+        <i class="fa-solid fa-trash"></i> Delete / हटाएँ
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ─────────────────────────────────────────────────────── -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// CONFIG — change API_BASE_URL to point to your deployed backend
+// ═══════════════════════════════════════════════════════════════════
+const API_BASE_URL = 'http://localhost:5000'; // development
+// const API_BASE_URL = 'https://your-backend.onrender.com'; // production
+
+// ─── State ─────────────────────────────────────────────────────────
+let currentPage = 1;
+const PAGE_SIZE  = 50;
+let pendingDeleteId = null;
+let currentDetailId = null;
+
+// ─── Utility ────────────────────────────────────────────────────────
+function esc(s){ if(!s)return''; return String(s).replace(/[&<>"']/g,t=>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[t])); }
+
+function catBadge(cat){
+  const map={student:'cat-student',club:'cat-club',influencer:'cat-influencer',citizen:'cat-citizen'};
+  return `<span class="cat-badge ${map[cat]||''}">${esc(cat)}</span>`;
+}
+
+function showToast(msg, isErr=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show'+(isErr?' error':'');
+  setTimeout(()=>t.className='',3200);
+}
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// ─── API helper ─────────────────────────────────────────────────────
+async function api(path, opts={}){
+  const r = await fetch(API_BASE_URL+path, {
+    credentials:'include',
+    headers:{'Content-Type':'application/json',...(opts.headers||{})},
+    ...opts,
+  });
+  const json = await r.json().catch(()=>({success:false,message:'Invalid response'}));
+  return { ok: r.ok, status: r.status, ...json };
+}
+
+// ─── Auth check on load ──────────────────────────────────────────────
+async function checkAuth(){
+  const res = await api('/api/admin/me');
+  if(res.ok && res.success){
+    showDashboard(res.adminId);
+    loadRegistrations();
+  } else {
+    showLogin();
+  }
+}
+
+function showLogin(){
+  document.getElementById('login-panel').style.display='block';
+  document.getElementById('dashboard-panel').style.display='none';
+  document.getElementById('logout-btn').style.display='none';
+}
+
+function showDashboard(adminId){
+  document.getElementById('login-panel').style.display='none';
+  document.getElementById('dashboard-panel').style.display='block';
+  document.getElementById('logout-btn').style.display='inline-flex';
+  if(adminId) document.getElementById('topbar-admin-id').textContent=adminId;
+}
+
+// ─── Login ───────────────────────────────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', async(e)=>{
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  btn.disabled=true; btn.textContent='Logging in…'; err.style.display='none';
+
+  const res = await api('/api/admin/login',{
+    method:'POST',
+    body:JSON.stringify({
+      adminId: document.getElementById('admin-id-input').value.trim(),
+      password: document.getElementById('admin-pass-input').value,
+    }),
+  });
+
+  btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-lock-open"></i> Login / लॉगिन';
+
+  if(res.ok && res.success){
+    showDashboard(res.adminId);
+    loadRegistrations();
+    document.getElementById('login-form').reset();
+  } else {
+    err.textContent = res.message || 'Login failed.';
+    err.style.display='block';
+  }
+});
+
+// ─── Logout ──────────────────────────────────────────────────────────
+document.getElementById('logout-btn').addEventListener('click', async()=>{
+  await api('/api/admin/logout',{method:'POST'});
+  showLogin();
+  showToast('Logged out successfully.');
+});
+
+// ─── Load registrations ───────────────────────────────────────────────
+async function loadRegistrations(page=1){
+  currentPage=page;
+  const search   = document.getElementById('f-search').value.trim();
+  const category = document.getElementById('f-category').value;
+  const params   = new URLSearchParams({ page, limit: PAGE_SIZE });
+  if(search)   params.set('search', search);
+  if(category) params.set('category', category);
+
+  const res = await api(`/api/admin/registrations?${params}`);
+  if(!res.ok){
+    if(res.status===401){ showLogin(); return; }
+    showToast(res.message||'Failed to load.', true);
+    return;
+  }
+
+  // Summary
+  const s = res.summary || {};
+  document.getElementById('sum-total').textContent       = s.total      ?? '—';
+  document.getElementById('sum-today').textContent       = s.today      ?? '—';
+  document.getElementById('sum-students').textContent    = s.students   ?? '—';
+  document.getElementById('sum-clubs').textContent       = s.clubs      ?? '—';
+  document.getElementById('sum-influencers').textContent = s.influencers?? '—';
+  document.getElementById('sum-citizens').textContent    = s.citizens   ?? '—';
+
+  // Table
+  const tbody = document.getElementById('reg-tbody');
+  if(!res.data || res.data.length===0){
+    tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:24px;color:#4a6080;">
+      No registrations found.</td></tr>`;
+  } else {
+    tbody.innerHTML = res.data.map(r=>`
+      <tr onclick="viewDetail('${esc(r.registrationId)}')">
+        <td class="reg-id-cell">${esc(r.registrationId)}</td>
+        <td>${esc(r.fullName)}</td>
+        <td>${esc(r.phone)}</td>
+        <td>${catBadge(r.category)}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.institution)}</td>
+        <td>${esc(r.city)}</td>
+        <td>${esc(r.regDate)}</td>
+        <td onclick="event.stopPropagation()">
+          <div class="action-btns">
+            <button class="btn-view"   onclick="viewDetail('${esc(r.registrationId)}')">
+              <i class="fa-solid fa-eye"></i> View</button>
+            <button class="btn-delete" onclick="confirmDelete('${esc(r.registrationId)}')">
+              <i class="fa-solid fa-trash"></i> Delete</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  // Pagination
+  const p = res.pagination || {};
+  const totalPages = Math.ceil((p.total||0) / PAGE_SIZE);
+  const pg = document.getElementById('pagination');
+  pg.innerHTML='';
+  for(let i=1;i<=totalPages;i++){
+    const b=document.createElement('button');
+    b.textContent=i; if(i===page) b.className='active';
+    b.onclick=()=>loadRegistrations(i);
+    pg.appendChild(b);
+  }
+}
+
+// Search on Enter
+document.getElementById('f-search').addEventListener('keydown',e=>{ if(e.key==='Enter') loadRegistrations(); });
+
+// ─── View detail ─────────────────────────────────────────────────────
+async function viewDetail(registrationId){
+  currentDetailId = registrationId;
+  const res = await api(`/api/admin/registrations/${encodeURIComponent(registrationId)}`);
+  if(!res.ok){ showToast(res.message||'Not found',true); return; }
+  const d = res.data;
+
+  const fields=[
+    ['Registration ID', d.registrationId, true],
+    ['Full Name', d.fullName],
+    ['WhatsApp', d.phone],
+    ['Email', d.email],
+    ['Category', d.category],
+    ['Institution', d.institution],
+    ['City', d.city],
+    ['Social Media Active', d.socialActive],
+    ['Platform', d.platform||'—'],
+    ['Handle', d.handle||'—'],
+    ['Followers', d.followers||0],
+    ['Awareness Topics', (d.awarenessTopics||[]).join(', ')||'—'],
+    ['Pledge Accepted', d.pledgeAccepted ? 'Yes ✓' : 'No'],
+    ['Registration Date', d.regDate],
+    ['Registered At', d.registeredAt ? new Date(d.registeredAt).toLocaleString('en-IN') : '—'],
+    ['Source', d.source||'—'],
+    ['Created At', d.createdAt ? new Date(d.createdAt).toLocaleString('en-IN') : '—'],
+    ['Updated At', d.updatedAt ? new Date(d.updatedAt).toLocaleString('en-IN') : '—'],
+  ];
+
+  document.getElementById('detail-content').innerHTML = fields.map(([l,v,mono])=>`
+    <div class="detail-row">
+      <span class="detail-label">${esc(l)}</span>
+      <span class="detail-value${mono?' mono':''}">${esc(String(v))}</span>
+    </div>`).join('');
+
+  document.getElementById('detail-delete-btn').onclick=()=>{
+    closeModal('detail-modal'); confirmDelete(registrationId);
+  };
+  openModal('detail-modal');
+}
+
+// ─── Add registration ────────────────────────────────────────────────
+function openAddModal(){
+  document.getElementById('add-form').reset();
+  openModal('add-modal');
+}
+
+document.getElementById('add-form').addEventListener('submit', async(e)=>{
+  e.preventDefault();
+  const fd  = new FormData(e.target);
+  const data = Object.fromEntries(fd.entries());
+  data.pledgeAccepted = fd.has('pledgeAccepted');
+
+  const res = await api('/api/admin/registrations',{
+    method:'POST', body:JSON.stringify(data),
+  });
+  if(res.ok && res.success){
+    showToast(`✓ Added: ${res.data.registrationId}`);
+    closeModal('add-modal');
+    loadRegistrations();
+  } else {
+    showToast(res.message||'Failed to add.',true);
+  }
+});
+
+// ─── Delete ──────────────────────────────────────────────────────────
+function confirmDelete(id){
+  pendingDeleteId=id;
+  document.getElementById('delete-id-display').textContent=id;
+  openModal('delete-modal');
+}
+
+document.getElementById('confirm-delete-btn').addEventListener('click', async()=>{
+  if(!pendingDeleteId) return;
+  const res = await api(`/api/admin/registrations/${encodeURIComponent(pendingDeleteId)}`,{method:'DELETE'});
+  closeModal('delete-modal');
+  if(res.ok && res.success){
+    showToast(`✓ Deleted: ${pendingDeleteId}`);
+    pendingDeleteId=null;
+    loadRegistrations();
+  } else {
+    showToast(res.message||'Delete failed.',true);
+  }
+});
+
+// ─── CSV export ──────────────────────────────────────────────────────
+async function exportCsv(){
+  const res = await api(`/api/admin/registrations?limit=9999`);
+  if(!res.ok||!res.data){ showToast('Export failed.',true); return; }
+  const headers=['Registration ID','Name','Phone','Email','Category','Institution',
+                 'City','Social Active','Platform','Handle','Followers',
+                 'Pledge','Date','Source'];
+  const rows=res.data.map(d=>[
+    d.registrationId,d.fullName,d.phone,d.email,d.category,
+    d.institution,d.city,d.socialActive,d.platform,d.handle,
+    d.followers,d.pledgeAccepted?'Yes':'No',d.regDate,d.source
+  ].map(v=>`"${String(v||'').replace(/"/g,'""')}"`));
+  const csv='data:text/csv;charset=utf-8,'+[headers.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const a=document.createElement('a');
+  a.href=encodeURI(csv);
+  a.download=`HPPCHRI_Registrations_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ─── Close modal on backdrop click ───────────────────────────────────
+document.querySelectorAll('.modal-backdrop').forEach(m=>{
+  m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+// ─── Init ────────────────────────────────────────────────────────────
+checkAuth();
+</script>
+</body>
+</html>

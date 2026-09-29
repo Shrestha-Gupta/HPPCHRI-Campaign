@@ -1,45 +1,57 @@
 /**
- * HPPCHRI - Cancer Awareness Drive ("Yuva Sanchar") Registration System
- * Handles multi-category participant registrations, pass generation, and local data persistence
- * Updated with palette: ["#05668d", "#028090", "#00a896", "#02c39a", "#f0f3bd"]
+ * HPPCHRI - Yuva Sanchar Registration System v3
+ * Primary storage: MongoDB via backend API
+ * QR: real scannable code via QRCode.js
  */
 
-const STORAGE_KEY = 'hppchri_registrations_v1';
+// ─── Config ────────────────────────────────────────────────────────
+// Change this to your deployed backend URL in production
+const API_BASE_URL = 'http://localhost:5000';
 
-document.addEventListener('DOMContentLoaded', () => {
-  initRegistrationForm();
-  initAdminModal();
-});
+// Verification URL base for QR payload
+const VERIFY_BASE = (() => {
+  const o = window.location.origin;
+  const p = window.location.pathname.replace(/\/[^/]*$/, '');
+  return o + p;
+})();
 
-function getStoredRegistrations() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) {
-    console.error('Error reading localStorage:', e);
-    return [];
+// ─── QR code rendering ─────────────────────────────────────────────
+function renderQrCode(registrationId, containerEl) {
+  containerEl.innerHTML = '';
+  const payload = `${VERIFY_BASE}/pass.html?id=${encodeURIComponent(registrationId)}`;
+  if (typeof QRCode !== 'undefined') {
+    new QRCode(containerEl, {
+      text: payload, width: 108, height: 108,
+      colorDark: '#05668d', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M,
+    });
+  } else {
+    containerEl.innerHTML = `<div style="width:108px;height:108px;background:#f0f3bd;
+      display:flex;align-items:center;justify-content:center;font-size:.6rem;
+      color:#05668d;border:2px solid #05668d;border-radius:4px;padding:4px;
+      word-break:break-all;text-align:center;">${registrationId}</div>`;
   }
 }
 
-function saveRegistration(data) {
-  const list = getStoredRegistrations();
-  list.unshift(data);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
+// ─── Init ──────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  initRegistrationForm();
+  // Admin button in navbar now links to /admin.html — no modal needed
+});
 
 function initRegistrationForm() {
-  const form = document.getElementById('drive-registration-form');
-  const categorySelect = document.getElementById('reg-category');
+  const form               = document.getElementById('drive-registration-form');
+  const categorySelect     = document.getElementById('reg-category');
   const socialActiveSelect = document.getElementById('reg-social-active');
-  const influencerDetails = document.getElementById('influencer-details-group');
-  const institutionGroup = document.getElementById('institution-group');
-  const institutionLabel = document.getElementById('institution-label');
-  const passContainer = document.getElementById('pass-showcase-container');
-  const formCard = document.getElementById('registration-form-card');
+  const influencerDetails  = document.getElementById('influencer-details-group');
+  const institutionGroup   = document.getElementById('institution-group');
+  const institutionLabel   = document.getElementById('institution-label');
+  const passContainer      = document.getElementById('pass-showcase-container');
+  const formCard           = document.getElementById('registration-form-card');
 
   if (!form) return;
 
-  // Category conditional toggle
+  // Category → conditional fields
   if (categorySelect) {
     categorySelect.addEventListener('change', () => {
       const cat = categorySelect.value;
@@ -65,129 +77,131 @@ function initRegistrationForm() {
     });
   }
 
-  // Social media conditional toggle
   if (socialActiveSelect) {
     socialActiveSelect.addEventListener('change', () => {
-      const activeGroup = document.getElementById('social-details-group');
-      if (activeGroup) {
-        activeGroup.style.display = socialActiveSelect.value === 'yes' ? 'block' : 'none';
-      }
+      const g = document.getElementById('social-details-group');
+      if (g) g.style.display = socialActiveSelect.value === 'yes' ? 'block' : 'none';
     });
   }
 
-  // Handle Submission
-  form.addEventListener('submit', (e) => {
+  // ── Form submission → POST to backend ─────────────────────────────
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
 
-    const fullName = document.getElementById('reg-name').value.trim();
-    const phone = document.getElementById('reg-phone').value.trim();
-    const email = document.getElementById('reg-email').value.trim();
-    const category = document.getElementById('reg-category').value;
-    const city = document.getElementById('reg-city').value.trim();
+    const fullName      = document.getElementById('reg-name').value.trim();
+    const phone         = document.getElementById('reg-phone').value.trim();
+    const email         = document.getElementById('reg-email').value.trim();
+    const category      = document.getElementById('reg-category').value;
+    const city          = document.getElementById('reg-city').value.trim();
     const pledgeChecked = document.getElementById('reg-pledge').checked;
+    const socialActive  = document.getElementById('reg-social-active')?.value || 'no';
 
+    // Basic client-side validation
     if (!fullName || !phone || !category) {
       alert('कृपया सभी आवश्यक फ़ील्ड भरें / Please fill all required fields.');
       return;
     }
-
     if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ''))) {
       alert('कृपया एक वैध 10-अंकीय व्हाट्सएप नंबर दर्ज करें / Please enter a valid 10-digit WhatsApp number.');
       return;
     }
-
     if (!pledgeChecked) {
       alert('कृपया जागरूकता अभियान की प्रतिज्ञा स्वीकार करें / Please accept the awareness campaign pledge.');
       return;
     }
 
-    let institution = document.getElementById('reg-institution') ? document.getElementById('reg-institution').value.trim() : '';
-    let platform = '';
-    let handle = '';
-    let followers = 0;
+    let institution = document.getElementById('reg-institution')?.value.trim() || '';
+    let platform = '', handle = '', followers = 0;
+    let awarenessTopics = [];
 
     if (category === 'influencer') {
-      platform = document.getElementById('reg-platform') ? document.getElementById('reg-platform').value : '';
-      handle = document.getElementById('reg-handle') ? document.getElementById('reg-handle').value.trim() : '';
-      followers = parseInt(document.getElementById('reg-followers') ? document.getElementById('reg-followers').value : 0, 10) || 0;
+      platform  = document.getElementById('reg-platform')?.value ?? '';
+      handle    = document.getElementById('reg-handle')?.value.trim() ?? '';
+      followers = parseInt(document.getElementById('reg-followers')?.value ?? 0, 10) || 0;
       institution = `Influencer (${platform} @${handle.replace('@', '')})`;
-
       if (followers < 10000) {
-        const proceed = confirm('नोट: इन्फ्लुएंसर श्रेणी के लिए 10,000+ फॉलोअर्स का मानक है। क्या आप छात्र/क्लब सदस्य के रूप में भाग लेना चाहेंगे या आगे बढ़ें?');
+        const proceed = confirm('नोट: इन्फ्लुएंसर श्रेणी के लिए 10,000+ फॉलोअर्स का मानक है। क्या आप आगे बढ़ना चाहेंगे?');
         if (!proceed) return;
       }
     }
 
-    // Generate Unique Registration ID
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const regId = `HPP-YS-50-${randomSuffix}`;
-    const regDate = new Date().toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
+    // Collect checked awareness topics
+    document.querySelectorAll('input[name="topics"]:checked').forEach(cb => {
+      awarenessTopics.push(cb.value);
     });
 
-    const participantData = {
-      regId,
-      fullName,
-      phone,
-      email: email || 'N/A',
-      category,
-      institution: institution || 'Individual Volunteer',
-      city: city || 'Gorakhpur',
-      platform,
-      handle,
-      followers,
-      regDate,
-      timestamp: Date.now()
-    };
+    // ── Show loading state ───────────────────────────────────────────
+    const origBtnHTML = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registering… / पंजीकृत हो रहा है…';
 
-    saveRegistration(participantData);
-    renderDelegatePass(participantData);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/registrations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName, phone: phone.replace(/\D/g, ''), email,
+          category, institution, city, socialActive,
+          platform, handle, followers, awarenessTopics,
+          pledgeAccepted: pledgeChecked,
+        }),
+      });
 
-    // Scroll to pass
-    if (formCard) formCard.style.display = 'none';
-    if (passContainer) {
-      passContainer.classList.add('active');
-      passContainer.scrollIntoView({ behavior: 'smooth' });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        alert(`Registration failed / पंजीकरण विफल:\n${result.message || 'Please try again.'}`);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = origBtnHTML;
+        return;
+      }
+
+      // ── SUCCESS ─────────────────────────────────────────────────────
+      const participantData = result.data;
+      renderDelegatePass(participantData);
+
+      if (formCard) formCard.style.display = 'none';
+      if (passContainer) {
+        passContainer.classList.add('active');
+        passContainer.scrollIntoView({ behavior: 'smooth' });
+      }
+
+    } catch (networkErr) {
+      console.error('Network error:', networkErr);
+      alert('Network error / नेटवर्क त्रुटि: Could not reach the server. Please check your internet connection and try again.');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origBtnHTML;
     }
   });
 }
 
+// ─── Render delegate pass ──────────────────────────────────────────
 function renderDelegatePass(data) {
   const container = document.getElementById('pass-render-area');
   if (!container) return;
 
+  const regId = data.registrationId || data.regId;
+
   const categoryTitles = {
-    student: 'Student Delegate',
-    club: 'Club Member Ambassador',
+    student:    'Student Delegate',
+    club:       'Club Member Ambassador',
     influencer: 'Verified Digital Creator',
-    citizen: 'Community Health Advocate'
+    citizen:    'Community Health Advocate',
   };
-
   const categoryName = categoryTitles[data.category] || 'Campaign Delegate';
-
-  // SVG QR Code with updated theme
-  const qrSvg = `
-    <svg width="84" height="84" viewBox="0 0 100 100" fill="#05668d" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" fill="#ffffff"/>
-      <rect x="10" y="10" width="25" height="25" fill="#05668d"/>
-      <rect x="15" y="15" width="15" height="15" fill="#ffffff"/>
-      <rect x="65" y="10" width="25" height="25" fill="#05668d"/>
-      <rect x="70" y="15" width="15" height="15" fill="#ffffff"/>
-      <rect x="10" y="65" width="25" height="25" fill="#05668d"/>
-      <rect x="15" y="70" width="15" height="15" fill="#ffffff"/>
-      <rect x="42" y="15" width="10" height="10" fill="#00a896"/>
-      <rect x="42" y="42" width="16" height="16" fill="#02c39a"/>
-      <rect x="15" y="45" width="10" height="10" fill="#05668d"/>
-      <rect x="75" y="45" width="10" height="15" fill="#05668d"/>
-      <rect x="45" y="70" width="15" height="10" fill="#00a896"/>
-      <rect x="70" y="70" width="15" height="15" fill="#05668d"/>
-    </svg>
-  `;
+  const verificationUrl = `${VERIFY_BASE}/pass.html?id=${encodeURIComponent(regId)}`;
 
   container.innerHTML = `
     <div class="delegate-pass-card" id="printable-pass">
+
+      <div style="background:linear-gradient(135deg,#02c39a 0%,#00a896 100%);
+                  color:#fff;text-align:center;padding:10px 18px;
+                  border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0;
+                  font-weight:700;font-size:.95rem;letter-spacing:.03em;">
+        ✓ Registration Successful / पंजीकरण सफल
+      </div>
+
       <div class="pass-top-bar">
         <div class="pass-logos">
           <img src="assets/hppchri_logo.png" alt="HPPCHRI" class="pass-logo" />
@@ -203,149 +217,95 @@ function renderDelegatePass(data) {
           <div class="pass-details-list">
             <div><strong>Affiliation:</strong> ${escapeHtml(data.institution)}</div>
             <div><strong>Location:</strong> ${escapeHtml(data.city)}</div>
-            <div><strong>Registration ID:</strong> <span style="color: #f0f3bd; font-weight: bold;">${data.regId}</span></div>
-            <div><strong>Issued On:</strong> ${data.regDate}</div>
+            <div><strong>Issued On:</strong> ${escapeHtml(data.regDate)}</div>
+          </div>
+          <div style="margin-top:12px;border:2px solid var(--c-mint);border-radius:8px;
+                      padding:10px 14px;background:#eefcf8;">
+            <div style="font-size:.7rem;font-weight:700;color:#028090;text-transform:uppercase;
+                        letter-spacing:.07em;margin-bottom:3px;">
+              Registration ID / पंजीकरण संख्या
+            </div>
+            <div style="font-size:1.15rem;font-weight:800;color:#05668d;
+                        letter-spacing:.06em;font-family:monospace;">${regId}</div>
           </div>
         </div>
 
         <div class="pass-qr-box">
-          <div class="qr-placeholder">${qrSvg}</div>
-          <div class="pass-id-text">${data.regId}</div>
-          <div style="font-size: 0.65rem; color: #5b7083; margin-top: 2px;">VERIFIED ENTRY</div>
+          <div id="pass-qr-container" style="width:108px;height:108px;"></div>
+          <div class="pass-id-text" style="font-family:monospace;font-size:.7rem;margin-top:4px;">
+            ${regId}
+          </div>
+          <div style="font-size:.6rem;color:#5b7083;margin-top:2px;">SCAN TO VERIFY</div>
         </div>
       </div>
 
+      <div style="margin:0 16px 10px;background:#f0f8ff;border-left:3px solid #028090;
+                  padding:9px 14px;border-radius:4px;font-size:.8rem;color:#033f58;line-height:1.55;">
+        This pass confirms your successful registration for the Yuva Sanchar Campaign
+        and is valid for participation. Please keep your Registration ID safe.<br>
+        <em style="color:#5b7083;">यह पास आपके सफल पंजीकरण की पुष्टि करता है। अपनी पंजीकरण संख्या सुरक्षित रखें।</em>
+      </div>
+
       <div class="pass-footer-quote">
-        <span>“Know. Check. Act. Don't Delay.” — Yuva Sanchar Drive</span>
-        <span style="color: #f0f3bd; font-weight: 700;">HPPCHRI • Estd. 1975</span>
+        <span>"Know. Check. Act. Don't Delay." — Yuva Sanchar Drive</span>
+        <span style="color:#f0f3bd;font-weight:700;">HPPCHRI • Estd. 1975</span>
       </div>
     </div>
 
     <div class="pass-actions">
       <button class="btn btn-primary" onclick="window.print()">
-        Print / Download Official Pass
+        <i class="fa-solid fa-download"></i> Download / Print Pass
       </button>
       <a href="${getWhatsAppShareUrl(data)}" target="_blank" class="btn btn-mint">
-        Share Registration on WhatsApp
+        <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
       </a>
       <button class="btn btn-outline-teal" onclick="resetRegistrationForm()">
-        Register Another Participant
+        <i class="fa-solid fa-rotate-left"></i> Register Another
       </button>
     </div>
   `;
+
+  const qrEl = document.getElementById('pass-qr-container');
+  if (qrEl) renderQrCode(regId, qrEl);
 }
 
+// ─── WhatsApp share ────────────────────────────────────────────────
 function getWhatsAppShareUrl(data) {
-  const shareText = `*Yuva Sanchar — City-Wide Cancer Awareness Drive*\n\nI have registered as an official delegate with *Hanuman Prasad Poddar Cancer Hospital & Research Institute, Gorakhpur* for the Golden Jubilee Cancer Awareness Drive!\n\n*Registration ID:* ${data.regId}\n*Motto:* Know. Check. Act. Don't Delay.\n\nJoin the awareness movement and register here: ${window.location.href}`;
-  return `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+  const regId = data.registrationId || data.regId;
+  const verificationUrl = `${VERIFY_BASE}/pass.html?id=${encodeURIComponent(regId)}`;
+  const msg =
+`*Yuva Sanchar — Cancer Awareness Drive | HPPCHRI, Gorakhpur*
+
+✅ *Registration Successful / पंजीकरण सफल*
+
+*Name / नाम:* ${data.fullName}
+*Registration ID / पंजीकरण संख्या:* ${regId}
+*Category:* ${data.category}
+*Issued On:* ${data.regDate}
+
+My official digital delegate pass has been generated.
+यह पास युवा संचार अभियान के लिए मेरी भागीदारी की पुष्टि करता है।
+
+🔗 Verify Pass: ${verificationUrl}
+
+Join the campaign: Know. Check. Act. Don't Delay.`;
+
+  return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
 }
 
-window.resetRegistrationForm = function() {
-  const formCard = document.getElementById('registration-form-card');
+// ─── Reset ─────────────────────────────────────────────────────────
+window.resetRegistrationForm = function () {
+  const formCard      = document.getElementById('registration-form-card');
   const passContainer = document.getElementById('pass-showcase-container');
-  const form = document.getElementById('drive-registration-form');
-
+  const form          = document.getElementById('drive-registration-form');
   if (form) form.reset();
   if (passContainer) passContainer.classList.remove('active');
-  if (formCard) {
-    formCard.style.display = 'block';
-    formCard.scrollIntoView({ behavior: 'smooth' });
-  }
+  if (formCard) { formCard.style.display = 'block'; formCard.scrollIntoView({ behavior: 'smooth' }); }
 };
 
-function initAdminModal() {
-  const adminBtn = document.getElementById('admin-modal-btn');
-  const modalOverlay = document.getElementById('admin-modal-overlay');
-  const closeBtn = document.getElementById('admin-modal-close');
-  const exportBtn = document.getElementById('admin-export-csv');
-
-  if (!adminBtn || !modalOverlay) return;
-
-  adminBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    renderAdminTable();
-    modalOverlay.classList.add('active');
-  });
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      modalOverlay.classList.remove('active');
-    });
-  }
-
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) {
-      modalOverlay.classList.remove('active');
-    }
-  });
-
-  if (exportBtn) {
-    exportBtn.addEventListener('click', exportRegistrationsCsv);
-  }
-}
-
-function renderAdminTable() {
-  const container = document.getElementById('admin-table-body');
-  const totalCountEl = document.getElementById('admin-total-count');
-  const studentsCountEl = document.getElementById('admin-students-count');
-  const influencersCountEl = document.getElementById('admin-influencers-count');
-
-  if (!container) return;
-
-  const data = getStoredRegistrations();
-  if (totalCountEl) totalCountEl.textContent = data.length;
-  if (studentsCountEl) studentsCountEl.textContent = data.filter(d => d.category === 'student').length;
-  if (influencersCountEl) influencersCountEl.textContent = data.filter(d => d.category === 'influencer').length;
-
-  if (data.length === 0) {
-    container.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px; color: #5b7083;">No registrations recorded yet. Complete a registration form above.</td></tr>`;
-    return;
-  }
-
-  container.innerHTML = data.map(item => `
-    <tr>
-      <td><strong style="color: #028090;">${item.regId}</strong></td>
-      <td>${escapeHtml(item.fullName)}</td>
-      <td><span class="badge badge-teal" style="font-size:0.75rem;">${item.category}</span></td>
-      <td>${escapeHtml(item.institution)}</td>
-      <td>${escapeHtml(item.phone)}</td>
-      <td>${item.regDate}</td>
-    </tr>
-  `).join('');
-}
-
-function exportRegistrationsCsv() {
-  const data = getStoredRegistrations();
-  if (data.length === 0) {
-    alert('No registrations available to export.');
-    return;
-  }
-
-  const headers = ['Registration ID', 'Full Name', 'Category', 'Institution/Club', 'WhatsApp Phone', 'Email', 'City', 'Date Registered'];
-  const rows = data.map(d => [
-    `"${d.regId}"`,
-    `"${d.fullName.replace(/"/g, '""')}"`,
-    `"${d.category}"`,
-    `"${d.institution.replace(/"/g, '""')}"`,
-    `"${d.phone}"`,
-    `"${d.email}"`,
-    `"${d.city}"`,
-    `"${d.regDate}"`
-  ]);
-
-  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', `HPPCHRI_Registrations_${new Date().toISOString().slice(0,10)}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
+// ─── HTML escaping ─────────────────────────────────────────────────
 function escapeHtml(str) {
   if (!str) return '';
-  return str.replace(/[&<>'"]/g, 
-    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-  );
+  return String(str).replace(/[&<>'"]/g,
+    t => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[t] || t));
 }
