@@ -5,8 +5,18 @@
  */
 
 // ─── Config ────────────────────────────────────────────────────────
-// Change this to your deployed backend URL in production
-const API_BASE_URL = 'http://localhost:5000';
+// In production (Vercel), frontend and API share the same domain, so
+// we use an empty string — all fetch('/api/...') calls are same-origin.
+// During local development (localhost / 127.0.0.1), we target the
+// Express dev server running on port 5000.
+const API_BASE_URL = (() => {
+  const h = window.location.hostname;
+  if (h === 'localhost' || h === '127.0.0.1') {
+    return 'http://localhost:5000';
+  }
+  return ''; // same-origin: /api/... requests go to the Vercel function
+})();
+
 
 // Verification URL base for QR payload
 const VERIFY_BASE = (() => {

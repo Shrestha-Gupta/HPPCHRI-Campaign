@@ -363,10 +363,15 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════════════
-// CONFIG — change API_BASE_URL to point to your deployed backend
+// CONFIG — smart same-origin API detection
+// Production (Vercel): same domain → empty string = same-origin /api/...
+// Local dev (localhost/127.0.0.1): target Express on port 5000
 // ═══════════════════════════════════════════════════════════════════
-const API_BASE_URL = 'http://localhost:5000'; // development
-// const API_BASE_URL = 'https://your-backend.onrender.com'; // production
+const API_BASE_URL = (() => {
+  const h = window.location.hostname;
+  if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:5000';
+  return ''; // same-origin when deployed on Vercel
+})();
 
 // ─── State ─────────────────────────────────────────────────────────
 let currentPage = 1;

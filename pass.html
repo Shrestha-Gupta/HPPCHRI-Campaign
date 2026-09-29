@@ -70,8 +70,14 @@
 </div>
 
 <script>
-// ── Config ── change for production ──────────────────────────────────
-const API_BASE_URL = 'http://localhost:5000';
+// ── Config ── smart same-origin detection ────────────────────────
+// Production (Vercel): same domain → empty string = same-origin /api/...
+// Local dev (localhost/127.0.0.1): target Express on port 5000
+const API_BASE_URL = (() => {
+  const h = window.location.hostname;
+  if (h === 'localhost' || h === '127.0.0.1') return 'http://localhost:5000';
+  return '';
+})();
 const VERIFY_BASE  = window.location.origin + window.location.pathname.replace(/\/[^/]*$/,'');
 
 function esc(s){ if(!s)return''; return String(s).replace(/[&<>"']/g,
