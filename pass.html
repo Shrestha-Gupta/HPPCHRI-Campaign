@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <style>
     body { font-family:'Inter',sans-serif; background:#f0f4f8; min-height:100vh;
            display:flex; flex-direction:column; align-items:center;
@@ -38,7 +37,6 @@
                           text-transform:uppercase; letter-spacing:.07em; }
     .reg-id-box .value { font-size:1.4rem; font-weight:800; color:#05668d;
                           font-family:monospace; letter-spacing:.06em; }
-    .qr-area { text-align:center; margin:16px 0; }
     .note { background:#f0f8ff; border-left:3px solid #028090; padding:10px 14px;
             border-radius:4px; font-size:.8rem; color:#033f58; line-height:1.55; margin-top:16px; }
     .btn-back { display:inline-flex; align-items:center; gap:8px; padding:10px 22px;
@@ -79,19 +77,9 @@ const API_BASE_URL = (() => {
   if (h === 'localhost')  return 'http://localhost:5000';
   return '';
 })();
-const VERIFY_BASE  = window.location.origin + window.location.pathname.replace(/\/[^/]*$/,'');
 
 function esc(s){ if(!s)return''; return String(s).replace(/[&<>"']/g,
   t=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[t]||t)); }
-
-function renderQr(regId, el){
-  el.innerHTML='';
-  const payload=`${VERIFY_BASE}/pass.html?id=${encodeURIComponent(regId)}`;
-  if(typeof QRCode!=='undefined'){
-    new QRCode(el,{text:payload,width:120,height:120,colorDark:'#05668d',
-      colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-  }
-}
 
 function catLabel(cat){
   return {student:'Student Delegate',club:'Club Member Ambassador',
@@ -100,7 +88,6 @@ function catLabel(cat){
 
 function renderFound(d){
   const body=document.getElementById('verify-body');
-  const qrId='qr-'+Date.now();
   body.innerHTML=`
     <div class="status-badge status-found">
       <i class="fa-solid fa-circle-check"></i>
@@ -120,9 +107,6 @@ function renderFound(d){
       <span class="field-value">${esc(d.city)}</span></div>
     <div class="field-row"><span class="field-label">Registered On</span>
       <span class="field-value">${esc(d.regDate)}</span></div>
-    <div class="qr-area"><div id="${qrId}"></div>
-      <div style="font-size:.7rem;color:#5b7083;margin-top:6px;">Scan to open this page</div>
-    </div>
     <div class="note">
       ✅ This delegate has successfully registered for the
       <strong>Yuva Sanchar Cancer Awareness Campaign</strong> at HPPCHRI, Gorakhpur.<br>
@@ -131,8 +115,6 @@ function renderFound(d){
     <a href="index.html" class="btn-back">
       <i class="fa-solid fa-arrow-left"></i> Back to Campaign Website
     </a>`;
-  const el=document.getElementById(qrId);
-  if(el) renderQr(d.registrationId, el);
 }
 
 function renderNotFound(regId){
@@ -165,7 +147,7 @@ function renderError(msg){
   const regId  = params.get('id');
 
   if(!regId){
-    renderError('No Registration ID provided. Please scan the QR code on your delegate pass.');
+    renderError('No Registration ID provided. Please use the pass link from your confirmation email.');
     return;
   }
 

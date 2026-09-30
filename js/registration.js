@@ -1,7 +1,6 @@
 /**
  * HPPCHRI - Yuva Sanchar Registration System v3
  * Primary storage: MongoDB via backend API
- * QR: real scannable code via QRCode.js
  */
 
 // ─── Config ────────────────────────────────────────────────────────
@@ -17,31 +16,12 @@ const API_BASE_URL = (() => {
   return ''; // same-origin on Vercel
 })();
 
-
-// Verification URL base for QR payload
+// Verification URL base for pass link
 const VERIFY_BASE = (() => {
   const o = window.location.origin;
   const p = window.location.pathname.replace(/\/[^/]*$/, '');
   return o + p;
 })();
-
-// ─── QR code rendering ─────────────────────────────────────────────
-function renderQrCode(registrationId, containerEl) {
-  containerEl.innerHTML = '';
-  const payload = `${VERIFY_BASE}/pass.html?id=${encodeURIComponent(registrationId)}`;
-  if (typeof QRCode !== 'undefined') {
-    new QRCode(containerEl, {
-      text: payload, width: 108, height: 108,
-      colorDark: '#05668d', colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M,
-    });
-  } else {
-    containerEl.innerHTML = `<div style="width:108px;height:108px;background:#f0f3bd;
-      display:flex;align-items:center;justify-content:center;font-size:.6rem;
-      color:#05668d;border:2px solid #05668d;border-radius:4px;padding:4px;
-      word-break:break-all;text-align:center;">${registrationId}</div>`;
-  }
-}
 
 // ─── Init ──────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -102,6 +82,7 @@ function initRegistrationForm() {
     const fullName      = document.getElementById('reg-name').value.trim();
     const phone         = document.getElementById('reg-phone').value.trim();
     const email         = document.getElementById('reg-email').value.trim();
+    const instagramUrl  = document.getElementById('reg-instagram-url')?.value.trim() || '';
     const category      = document.getElementById('reg-category').value;
     const city          = document.getElementById('reg-city').value.trim();
     const pledgeChecked = document.getElementById('reg-pledge').checked;
@@ -131,16 +112,27 @@ function initRegistrationForm() {
       alert('कृपया जागरूकता अभियान की प्रतिज्ञा स्वीकार करें / Please accept the awareness campaign pledge.');
       return;
     }
+    // Instagram URL — required for all registrants
+    if (!instagramUrl) {
+      alert('कृपया अपना Instagram प्रोफाइल लिंक दर्ज करें / Please enter your Instagram Profile Link.');
+      document.getElementById('reg-instagram-url').focus();
+      return;
+    }
+    if (!/^https?:\/\/(www\.)?instagram\.com\/.+/i.test(instagramUrl)) {
+      alert('कृपया एक वैध Instagram URL दर्ज करें / Please enter a valid Instagram Profile URL.\nExample: https://instagram.com/yourusername');
+      document.getElementById('reg-instagram-url').focus();
+      return;
+    }
 
     let institution = document.getElementById('reg-institution')?.value.trim() || '';
-    let platform = '', handle = '', followers = 0;
+    // 'handle' always carries the Instagram URL from reg-instagram-url
+    let platform = '', handle = instagramUrl, followers = 0;
     let awarenessTopics = [];
 
     if (category === 'influencer') {
       platform  = document.getElementById('reg-platform')?.value ?? '';
-      handle    = document.getElementById('reg-handle')?.value.trim() ?? '';
       followers = parseInt(document.getElementById('reg-followers')?.value ?? 0, 10) || 0;
-      institution = `Influencer (${platform} @${handle.replace('@', '')})`;
+      institution = `Influencer (${platform})`;
       if (followers < 10000) {
         const proceed = confirm('नोट: इन्फ्लुएंसर श्रेणी के लिए 10,000+ फॉलोअर्स का मानक है। क्या आप आगे बढ़ना चाहेंगे?');
         if (!proceed) return;
@@ -179,6 +171,10 @@ function initRegistrationForm() {
       }
 
       // ── SUCCESS ─────────────────────────────────────────────────────
+      // Re-enable button NOW so "Register Again" flow works cleanly
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origBtnHTML;
+
       const participantData = result.data;
       renderDelegatePass(participantData);
 
@@ -217,7 +213,7 @@ function initRegistrationForm() {
   });
 }
 
-// ─── Render delegate pass ──────────────────────────────────────────
+// ─── Render delegate pass (NO QR code) ────────────────────────────
 function renderDelegatePass(data) {
   const container = document.getElementById('pass-render-area');
   if (!container) return;
@@ -236,10 +232,7 @@ function renderDelegatePass(data) {
   container.innerHTML = `
     <div class="delegate-pass-card" id="printable-pass">
 
-      <div style="background:linear-gradient(135deg,#02c39a 0%,#00a896 100%);
-                  color:#fff;text-align:center;padding:10px 18px;
-                  border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0;
-                  font-weight:700;font-size:.95rem;letter-spacing:.03em;">
+      <div class="pass-success-banner">
         ✓ Registration Successful / पंजीकरण सफल
       </div>
 
@@ -248,48 +241,44 @@ function renderDelegatePass(data) {
           <img src="assets/hppchri_logo.png" alt="HPPCHRI" class="pass-logo" />
           <img src="assets/golden_jubilee_logo.png" alt="50 Golden Years" class="pass-logo" />
         </div>
-        <div class="pass-badge-label">OFFICIAL DELEGATE PASS</div>
       </div>
 
       <div class="pass-body">
         <div class="pass-user-info">
-          <div class="pass-category-pill">${categoryName}</div>
-          <h2>${escapeHtml(data.fullName)}</h2>
+
+          <!-- Participant identity card: static campaign image + registered name -->
+          <div class="pass-identity-card">
+            <img src="assets/yuva_sanchar_cover_1.jpg" alt="Yuva Sanchar Campaign" class="pass-identity-img" />
+            <div class="pass-identity-name">
+              <div class="pass-identity-name-label">Registered Participant</div>
+              <div class="pass-identity-name-value">${escapeHtml(data.fullName)}</div>
+              <div class="pass-category-pill">${categoryName}</div>
+            </div>
+          </div>
+
           <div class="pass-details-list">
             <div><strong>Affiliation:</strong> ${escapeHtml(data.institution)}</div>
             <div><strong>Location:</strong> ${escapeHtml(data.city)}</div>
             <div><strong>Issued On:</strong> ${escapeHtml(data.regDate)}</div>
           </div>
-          <div style="margin-top:12px;border:2px solid var(--c-mint);border-radius:8px;
-                      padding:10px 14px;background:#eefcf8;">
-            <div style="font-size:.7rem;font-weight:700;color:#028090;text-transform:uppercase;
-                        letter-spacing:.07em;margin-bottom:3px;">
-              Registration ID / पंजीकरण संख्या
-            </div>
-            <div style="font-size:1.15rem;font-weight:800;color:#05668d;
-                        letter-spacing:.06em;font-family:monospace;">${regId}</div>
+          <div class="pass-id-block">
+            <div class="pass-id-label">Registration ID / पंजीकरण संख्या</div>
+            <div class="pass-id-value">${regId}</div>
           </div>
-        </div>
-
-        <div class="pass-qr-box">
-          <div id="pass-qr-container" style="width:108px;height:108px;"></div>
-          <div class="pass-id-text" style="font-family:monospace;font-size:.7rem;margin-top:4px;">
-            ${regId}
-          </div>
-          <div style="font-size:.6rem;color:#5b7083;margin-top:2px;">SCAN TO VERIFY</div>
         </div>
       </div>
 
-      <div style="margin:0 16px 10px;background:#f0f8ff;border-left:3px solid #028090;
-                  padding:9px 14px;border-radius:4px;font-size:.8rem;color:#033f58;line-height:1.55;">
-        This pass confirms your successful registration for the Yuva Sanchar Campaign
+      <div class="pass-info-note">
+        <div class="pass-info-note-label">Event Information</div>
+        This pass confirms your successful registration for the
+        <strong>Cancer se Jung, Gorakhpur ke Sang</strong> campaign
         and is valid for participation. Please keep your Registration ID safe.<br>
-        <em style="color:#5b7083;">यह पास आपके सफल पंजीकरण की पुष्टि करता है। अपनी पंजीकरण संख्या सुरक्षित रखें।</em>
+        <em>यह पास <strong>"Cancer se Jung, Gorakhpur ke Sang"</strong> अभियान में आपके सफल पंजीकरण की पुष्टि करता है। अपनी पंजीकरण संख्या सुरक्षित रखें।</em>
       </div>
 
       <div class="pass-footer-quote">
-        <span>"Know. Check. Act. Don't Delay." — Yuva Sanchar Drive</span>
-        <span style="color:#f0f3bd;font-weight:700;">HPPCHRI • Estd. 1975</span>
+        <span>"Know. Check. Act. Don't Delay."</span>
+        <span class="pass-footer-brand">HPPCHRI • Estd. 1975</span>
       </div>
     </div>
 
@@ -305,9 +294,6 @@ function renderDelegatePass(data) {
       </button>
     </div>
   `;
-
-  const qrEl = document.getElementById('pass-qr-container');
-  if (qrEl) renderQrCode(regId, qrEl);
 }
 
 // ─── WhatsApp share ────────────────────────────────────────────────
@@ -334,14 +320,43 @@ Join the campaign: Know. Check. Act. Don't Delay.`;
   return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
 }
 
-// ─── Reset ─────────────────────────────────────────────────────────
+// ─── Reset — complete state wipe for "Register Another" ───────────
 window.resetRegistrationForm = function () {
   const formCard      = document.getElementById('registration-form-card');
   const passContainer = document.getElementById('pass-showcase-container');
+  const passRender    = document.getElementById('pass-render-area');
   const form          = document.getElementById('drive-registration-form');
-  if (form) form.reset();
+
+  // 1. Clear the pass render area completely (removes old pass + email notice)
+  if (passRender) passRender.innerHTML = '';
+
+  // 2. Hide pass container, show form
   if (passContainer) passContainer.classList.remove('active');
-  if (formCard) { formCard.style.display = 'block'; formCard.scrollIntoView({ behavior: 'smooth' }); }
+  if (formCard) { formCard.style.display = 'block'; }
+
+  // 3. Reset all form field values
+  if (form) {
+    form.reset();
+
+    // 4. Re-enable submit button (this was the Register Again bug — button
+    //    stayed disabled=true from the previous successful submission)
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-id-card"></i> Register &amp; Generate Pass / पंजीकरण करें';
+    }
+
+    // 5. Reset conditional field visibility to default state
+    const institutionGroup  = document.getElementById('institution-group');
+    const influencerDetails = document.getElementById('influencer-details-group');
+    const socialDetails     = document.getElementById('social-details-group');
+    if (institutionGroup)  institutionGroup.style.display  = 'block';
+    if (influencerDetails) influencerDetails.style.display = 'none';
+    if (socialDetails)     socialDetails.style.display     = 'none';
+  }
+
+  // 6. Scroll form into view
+  if (formCard) formCard.scrollIntoView({ behavior: 'smooth' });
 };
 
 // ─── HTML escaping ─────────────────────────────────────────────────
