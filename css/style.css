@@ -2361,422 +2361,121 @@ section, .section, .registration-section, .hero-section {
   background: #f7fafc;
 }
 
-/* Print Styles - Strictly 1 Single Page Output */
 /* ==========================================================================
-   How to Participate Section
+   How to Participate Section (Editorial Redesign)
    ========================================================================== */
 
 .htp-steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
-  margin-top: 40px;
-  margin-bottom: 44px;
+  gap: 28px;
+  margin-top: 10px;
 }
 
 .htp-step-card {
   background: var(--bg-surface);
-  border-radius: var(--border-radius-lg);
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-md);
-  padding: 28px 24px;
+  border-radius: var(--border-radius-md);
+  padding: 32px 28px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .htp-step-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-.htp-step-card--highlight {
   border-color: var(--c-teal);
-  background: linear-gradient(160deg, #f0fbf8 0%, #ffffff 100%);
-  box-shadow: 0 4px 20px var(--teal-glow);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
-.htp-step-number {
-  font-size: 2.6rem;
-  font-weight: 900;
-  color: var(--c-mint);
-  opacity: 0.35;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.htp-step-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: var(--teal-light);
+.htp-step-num {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 800;
   color: var(--c-deep-teal);
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.htp-step-body {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .htp-step-title {
-  font-size: 1.08rem;
-  color: var(--c-deep-blue);
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
   font-weight: 700;
-  margin: 0;
+  color: var(--c-deep-blue);
+  margin: 0 0 10px 0;
+  line-height: 1.35;
 }
 
 .htp-step-desc {
-  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
   color: var(--text-body);
   line-height: 1.65;
   margin: 0;
+  flex-grow: 1;
 }
 
-.htp-step-note {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  background: #f0fbf8;
-  border-left: 3px solid var(--c-mint);
-  border-radius: 0 6px 6px 0;
-  padding: 8px 12px;
-  line-height: 1.55;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.htp-step-note i { color: var(--c-teal); flex-shrink: 0; margin-top: 2px; }
-
-.htp-note-warning {
-  background: #fffbeb;
-  border-left-color: #f59e0b;
-  color: #78350f;
-}
-
-.htp-note-warning i { color: #f59e0b; }
-
-.htp-brochure-btn {
-  align-self: flex-start;
-  font-size: 0.88rem;
-  padding: 10px 18px;
-}
-
-.htp-mini-list {
-  margin: 0;
-  padding-left: 18px;
-  font-size: 0.88rem;
-  color: var(--text-body);
-  line-height: 1.8;
-}
-
-.htp-mini-list li { margin-bottom: 2px; }
-
-.htp-checklist {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.htp-check {
-  font-size: 0.86rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
-  border-radius: 6px;
-}
-
-.htp-check i { flex-shrink: 0; font-size: 0.8rem; }
-
-.htp-check-good {
-  background: #f0fbf8;
-  color: var(--c-deep-teal);
-}
-.htp-check-good i { color: var(--c-mint); }
-
-.htp-check-bad {
-  background: #fef2f2;
-  color: #991b1b;
-}
-.htp-check-bad i { color: #f87171; }
-
-.htp-collab-badge {
+.htp-action-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: var(--c-deep-blue);
-  color: #f0f3bd;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  padding: 4px 12px;
-  border-radius: var(--border-radius-full);
-  align-self: flex-start;
-}
-
-.htp-official-account {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--c-deep-teal);
   background: var(--teal-light);
-  border: 1.5px solid var(--c-teal);
-  border-radius: 10px;
-  padding: 12px 16px;
-}
-
-.htp-official-account > i {
-  font-size: 1.8rem;
-  color: var(--c-teal);
-  flex-shrink: 0;
-}
-
-.htp-account-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--c-deep-teal);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 2px;
-}
-
-.htp-account-handle {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--c-deep-teal);
+  border: 1px solid rgba(0, 168, 150, 0.25);
+  border-radius: 6px;
+  padding: 7px 14px;
+  margin-top: 14px;
   text-decoration: none;
+  align-self: flex-start;
+  transition: all 0.2s ease;
 }
-.htp-account-handle:hover { text-decoration: underline; }
 
-.htp-hashtags {
+.htp-action-link:hover {
+  background: var(--c-deep-teal);
+  color: #ffffff;
+  border-color: var(--c-deep-teal);
+}
+
+.htp-hashtag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
+  margin-top: 12px;
 }
 
-.htp-tag {
-  background: var(--c-deep-blue);
-  color: #f0f3bd;
-  font-size: 0.76rem;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: var(--border-radius-full);
-  letter-spacing: 0.02em;
-}
-
-.htp-leaderboard-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 100%);
-  border: 1.5px solid #c7d2fe;
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-top: 4px;
-}
-
-.htp-leaderboard-note > i {
-  font-size: 1.4rem;
-  color: #4f46e5;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.htp-leaderboard-note strong {
-  display: block;
-  font-size: 0.9rem;
-  color: #3730a3;
-  margin-bottom: 4px;
-}
-
-.htp-leaderboard-note p {
-  font-size: 0.82rem;
-  color: #4338ca;
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Requirements Box */
-.htp-requirements-box {
-  background: linear-gradient(135deg, #033f58 0%, #028090 100%);
-  border-radius: var(--border-radius-lg);
-  padding: 32px 36px;
-  margin-bottom: 44px;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-.htp-req-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 24px;
-}
-
-.htp-req-header > i {
-  font-size: 2rem;
-  color: var(--c-mint);
-}
-
-.htp-req-header h3 {
-  color: #ffffff;
-  font-size: 1.3rem;
-  margin: 0;
-}
-
-.htp-req-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px 24px;
-}
-
-.htp-req-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.5;
-}
-
-.htp-req-item i {
-  color: var(--c-mint);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* Certificate + Evaluation cards */
-.htp-outcomes-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 26px;
-  margin-bottom: 44px;
-}
-
-.htp-outcome-card {
-  border-radius: var(--border-radius-lg);
-  padding: 30px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.htp-outcome-cert {
-  background: linear-gradient(160deg, #f0fbf8 0%, #e6f9f5 100%);
-  border: 2px solid var(--c-mint);
-}
-
-.htp-outcome-eval {
-  background: linear-gradient(160deg, #f0f4ff 0%, #eef2ff 100%);
-  border: 2px solid #818cf8;
-}
-
-.htp-outcome-icon {
-  font-size: 2.2rem;
-}
-
-.htp-outcome-cert .htp-outcome-icon { color: var(--c-deep-teal); }
-.htp-outcome-eval .htp-outcome-icon { color: #4f46e5; }
-
-.htp-outcome-card h3 {
-  font-size: 1.15rem;
-  color: var(--c-deep-blue);
-  margin: 0;
-}
-
-.htp-outcome-card p {
-  font-size: 0.9rem;
-  color: var(--text-body);
-  line-height: 1.65;
-  margin: 0;
-}
-
-.htp-outcome-note {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  background: rgba(255,255,255,0.65);
-  border-radius: 6px;
-  padding: 8px 12px;
-  line-height: 1.5;
-  margin-top: 4px;
-}
-
-/* Participation Flow */
-.htp-flow-section {
-  text-align: center;
-}
-
-.htp-flow-title {
-  font-size: 1.2rem;
-  color: var(--c-deep-blue);
-  margin-bottom: 28px;
-  font-weight: 700;
-}
-
-.htp-flow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  max-width: 340px;
-  margin: 0 auto;
-}
-
-.htp-flow-step {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--bg-surface);
-  border: 1.5px solid var(--border-medium);
-  border-radius: var(--border-radius-full);
-  padding: 10px 22px;
-  font-size: 0.88rem;
+.htp-hashtag-chip {
+  font-size: 0.78rem;
   font-weight: 600;
-  color: var(--c-deep-blue);
-  width: 100%;
-  justify-content: center;
-  box-shadow: var(--shadow-sm);
+  color: var(--c-deep-teal);
+  background: #f1f8f9;
+  border: 1px solid rgba(2, 128, 144, 0.18);
+  border-radius: 4px;
+  padding: 4px 9px;
+  letter-spacing: 0.01em;
 }
 
-.htp-flow-step i {
-  color: var(--c-teal);
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-.htp-flow-step--end {
-  background: linear-gradient(135deg, var(--c-deep-teal) 0%, #028090 100%);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 4px 14px var(--teal-glow);
-}
-
-.htp-flow-step--end i { color: #f0f3bd; }
-
-.htp-flow-arrow {
-  color: var(--c-mint);
-  font-size: 1rem;
-  padding: 4px 0;
-  opacity: 0.7;
-}
-
-/* Responsive */
-@media (max-width: 1080px) {
+@media (max-width: 1024px) {
   .htp-steps-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .htp-req-grid {
-    grid-template-columns: 1fr;
+    gap: 22px;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 640px) {
   .htp-steps-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
-  .htp-outcomes-grid {
-    grid-template-columns: 1fr;
-  }
-  .htp-requirements-box {
+  .htp-step-card {
     padding: 24px 20px;
   }
 }
@@ -2785,6 +2484,7 @@ section, .section, .registration-section, .hero-section {
    End How to Participate Section
    ========================================================================== */
 
+/* Print Styles - Strictly 1 Single Page Output */
 @media print {
   html, body {
     background: #ffffff !important;
@@ -2800,6 +2500,7 @@ section, .section, .registration-section, .hero-section {
   .hero-section,
   #about-hospital,
   #the-drive,
+  #how-to-participate,
   #awareness-hub,
   #prizes-contests,
   #facilities,
