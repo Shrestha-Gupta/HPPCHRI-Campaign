@@ -112,14 +112,9 @@ function initRegistrationForm() {
       alert('कृपया जागरूकता अभियान की प्रतिज्ञा स्वीकार करें / Please accept the awareness campaign pledge.');
       return;
     }
-    // Instagram URL — required for all registrants
+    // Instagram — required, non-empty (accepts @username, username, any instagram URL)
     if (!instagramUrl) {
-      alert('कृपया अपना Instagram प्रोफाइल लिंक दर्ज करें / Please enter your Instagram Profile Link.');
-      document.getElementById('reg-instagram-url').focus();
-      return;
-    }
-    if (!/^https?:\/\/(www\.)?instagram\.com\/.+/i.test(instagramUrl)) {
-      alert('कृपया एक वैध Instagram URL दर्ज करें / Please enter a valid Instagram Profile URL.\nExample: https://instagram.com/yourusername');
+      alert('कृपया अपना Instagram हैंडल या प्रोफाइल लिंक दर्ज करें / Please enter your Instagram handle or profile link.');
       document.getElementById('reg-instagram-url').focus();
       return;
     }
@@ -246,15 +241,8 @@ function renderDelegatePass(data) {
       <div class="pass-body">
         <div class="pass-user-info">
 
-          <!-- Participant identity card: static campaign image + registered name -->
-          <div class="pass-identity-card">
-            <img src="assets/yuva_sanchar_cover_1.jpg" alt="Yuva Sanchar Campaign" class="pass-identity-img" />
-            <div class="pass-identity-name">
-              <div class="pass-identity-name-label">Registered Participant</div>
-              <div class="pass-identity-name-value">${escapeHtml(data.fullName)}</div>
-              <div class="pass-category-pill">${categoryName}</div>
-            </div>
-          </div>
+          <div class="pass-identity-name-label">Registered Participant</div>
+          <div class="pass-identity-name-value">${escapeHtml(data.fullName)}</div>
 
           <div class="pass-details-list">
             <div><strong>Affiliation:</strong> ${escapeHtml(data.institution)}</div>
@@ -268,18 +256,18 @@ function renderDelegatePass(data) {
         </div>
       </div>
 
-      <div class="pass-info-note">
-        <div class="pass-info-note-label">Event Information</div>
-        This pass confirms your successful registration for the
-        <strong>Cancer se Jung, Gorakhpur ke Sang</strong> campaign
-        and is valid for participation. Please keep your Registration ID safe.<br>
-        <em>यह पास <strong>"Cancer se Jung, Gorakhpur ke Sang"</strong> अभियान में आपके सफल पंजीकरण की पुष्टि करता है। अपनी पंजीकरण संख्या सुरक्षित रखें।</em>
-      </div>
-
       <div class="pass-footer-quote">
         <span>"Know. Check. Act. Don't Delay."</span>
         <span class="pass-footer-brand">HPPCHRI • Estd. 1975</span>
       </div>
+    </div>
+
+    <div class="pass-info-note">
+      <div class="pass-info-note-label">Event Information</div>
+      This pass confirms your successful registration for the
+      <strong>Cancer se Jung, Gorakhpur ke Sang</strong> campaign
+      and is valid for participation. Please keep your Registration ID safe.<br>
+      <em>यह पास <strong>"Cancer se Jung, Gorakhpur ke Sang"</strong> अभियान में आपके सफल पंजीकरण की पुष्टि करता है। अपनी पंजीकरण संख्या सुरक्षित रखें।</em>
     </div>
 
     <div class="pass-actions">

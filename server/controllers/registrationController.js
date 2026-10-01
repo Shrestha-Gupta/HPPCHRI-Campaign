@@ -53,14 +53,10 @@ exports.createRegistration = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
     }
 
-    // ── Instagram URL — required for all registrants ─────────────────
-    const instagramUrl = handle?.trim() || '';
-    const INSTAGRAM_RE = /^https?:\/\/(www\.)?instagram\.com\/.+/i;
-    if (!instagramUrl) {
-      return res.status(400).json({ success: false, message: 'Instagram Profile URL is required. Please enter your Instagram profile link (e.g. https://instagram.com/yourusername).' });
-    }
-    if (!INSTAGRAM_RE.test(instagramUrl)) {
-      return res.status(400).json({ success: false, message: 'Please enter a valid Instagram profile URL (e.g. https://instagram.com/yourusername). @username alone is not accepted.' });
+    // ── Instagram — required, non-empty ────────────────────────────────
+    const instagramVal = handle?.trim() || '';
+    if (!instagramVal) {
+      return res.status(400).json({ success: false, message: 'Instagram handle or profile link is required. Please enter your Instagram @username or profile URL.' });
     }
 
     // ── Generate unique ID ────────────────────────────────────────────

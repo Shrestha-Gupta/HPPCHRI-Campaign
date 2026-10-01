@@ -110,8 +110,8 @@
         <ul class="nav-links">
           <li><a href="#about-hospital" class="nav-link">Hospital</a></li>
           <li><a href="#the-drive" class="nav-link">The Drive</a></li>
-          <li><a href="#awareness-hub" class="nav-link">Awareness &amp; Quiz</a></li>
           <li><a href="#register" class="nav-link">Registration</a></li>
+          <li><a href="#awareness-hub" class="nav-link">Awareness &amp; Quiz</a></li>
           <li><a href="#prizes-contests" class="nav-link">Contest &amp; Prizes</a></li>
           <li><a href="#facilities" class="nav-link">Facilities</a></li>
           <li><a href="#patron-messages" class="nav-link">Patronage</a></li>
@@ -341,6 +341,211 @@
   </section>
 
   <!-- 3. Cancer Awareness Hub (Yuva Sanchar Modules) -->
+  <section class="registration-section" id="register">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">Join the Movement</span>
+        <h2 class="section-title">Official Delegate Registration</h2>
+        <p class="section-desc">
+          Register to receive your <strong>Official Digital Participation Delegate Pass</strong>, participate in awareness competitions, and join Gorakhpur's fight against cancer.
+        </p>
+      </div>
+
+      <!-- Registration Form Card -->
+      <div class="registration-card" id="registration-form-card">
+        <div class="reg-card-header">
+          <div class="reg-header-title">
+            <h3>Participant Registration Form</h3>
+            <p>Cancer se Jung, Gorakhpur ke Sang — Golden Jubilee 2026–27</p>
+          </div>
+          <span class="badge badge-cream" style="font-size: 0.8rem;">
+            <i class="fa-solid fa-lock"></i> Free Registration
+          </span>
+        </div>
+
+        <div class="reg-card-body">
+          <form id="drive-registration-form">
+            <div class="form-grid">
+              
+              <!-- Full Name -->
+              <div class="form-group">
+                <label class="form-label" for="reg-name">Full Name / पूरा नाम <span class="required">*</span></label>
+                <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Chandra Sharma / उदा.: रमेश चंद्र शर्मा" required />
+              </div>
+
+              <!-- WhatsApp Phone -->
+              <div class="form-group">
+                <label class="form-label" for="reg-phone">WhatsApp Number / व्हाट्सएप नंबर <span class="required">*</span></label>
+                <input type="tel" id="reg-phone" class="form-control" placeholder="10-digit / 10 अंकों का नंबर (e.g. 9838000000)" required />
+                <span class="form-hint">Used to send your registration confirmation and pass / पंजीकरण पुष्टि और पास भेजने के लिए उपयोग किया जाएगा</span>
+              </div>
+
+              <!-- Email Address -->
+              <div class="form-group">
+                <label class="form-label" for="reg-email">Email Address / ईमेल पता <span class="required">*</span></label>
+                <input type="email" id="reg-email" class="form-control" placeholder="e.g. name@example.com / उदा.: name@example.com" required />
+                <span class="form-hint">Confirmation email with your pass will be sent here / पुष्टि ईमेल यहाँ भेजा जाएगा</span>
+              </div>
+
+              <!-- Instagram Profile URL - required for all registrants -->
+              <div class="form-group">
+                <label class="form-label" for="reg-instagram-url">Instagram Profile / Handle / Instagram लिंक या हैंडल <span class="required">*</span></label>
+                <input type="url" id="reg-instagram-url" class="form-control" required
+                  placeholder="https://instagram.com/yourusername"
+                  pattern="https?://(www\.)?instagram\.com/.+" />
+                <span class="form-hint">e.g. @yourusername, username, or https://instagram.com/yourusername</span>
+              </div>
+
+              <!-- Participant Category -->
+              <div class="form-group">
+                <label class="form-label" for="reg-category">Participant Category / प्रतिभागी श्रेणी <span class="required">*</span></label>
+                <select id="reg-category" class="form-control" required>
+                  <option value="">-- Select Your Category / अपनी श्रेणी चुनें --</option>
+                  <option value="student">Student / छात्र (School / College / University)</option>
+                  <option value="club">Club Member / क्लब सदस्य (Rotary, Lions, NGO, Youth Club)</option>
+                  <option value="influencer">Content Creator / कंटेंट क्रिएटर / Social Media Influencer / सोशल मीडिया इन्फ्लुएंसर</option>
+                  <option value="citizen">General Citizen / Health Volunteer / सामान्य नागरिक / स्वास्थ्य स्वयंसेवक</option>
+                </select>
+              </div>
+
+              <!-- Dynamic Institution / Club Field -->
+              <div class="form-group full-width" id="institution-group">
+                <label class="form-label" id="institution-label" for="reg-institution">
+                  Institution / School / College / Club Name
+                  <small style="font-weight:400;color:var(--text-muted);">संस्था / विद्यालय / महाविद्यालय / क्लब का नाम</small>
+                </label>
+                <input type="text" id="reg-institution" class="form-control" placeholder="e.g. DDU Gorakhpur University / MMMUT / AIIMS / संस्था का नाम" />
+              </div>
+
+              <!-- City / District -->
+              <div class="form-group">
+                <label class="form-label" for="reg-city">City / District / शहर / जिला <span class="required">*</span></label>
+                <input type="text" id="reg-city" class="form-control" value="Gorakhpur" placeholder="e.g. Gorakhpur, Deoria / गोरखपुर, देवरिया" required />
+              </div>
+
+              <!-- Are you active on Social Media? -->
+              <div class="form-group">
+                <label class="form-label" for="reg-social-active">Active on Social Media? / क्या आप सोशल मीडिया पर सक्रिय हैं? <span class="required">*</span></label>
+                <select id="reg-social-active" class="form-control" required>
+                  <option value="yes">Yes, I create / share content / हाँ, मैं कंटेंट बनाता/बनाती हूँ</option>
+                  <option value="no">No, participating offline / नहीं, ऑफलाइन भागीदारी</option>
+                </select>
+              </div>
+
+              <!-- Social Details Conditional Block -->
+              <div class="form-group full-width" id="social-details-group">
+                <div style="background: #f8fafc; border: 1px solid var(--border-medium); border-radius: var(--border-radius-sm); padding: 18px;">
+                  <div style="font-weight: 600; font-size: 0.92rem; color: var(--c-deep-blue); margin-bottom: 12px;">
+                    Social Media Channels / सोशल मीडिया चैनल (Where you will share awareness content / जहाँ आप जागरूकता सामग्री साझा करेंगे)
+                  </div>
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label class="form-label">Primary Platform / प्रमुख प्लेटफ़ॉर्म</label>
+                      <select id="reg-platform" class="form-control">
+                        <option value="Instagram">Instagram</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="LinkedIn">LinkedIn</option>
+                        <option value="Twitter/X">X (Twitter)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Instagram Profile Link / Instagram &#x092a;&#x094d;&#x0930;&#x094b;&#x092b;&#x093e;&#x0907;&#x0932; &#x0932;&#x093f;&#x0902;&#x0915; <span class="required">*</span></label>
+                      <input type="url" id="reg-handle" class="form-control" required
+                        placeholder="https://instagram.com/yourusername"
+                        pattern="https?://(www\.)?instagram\.com/.+" />
+                      <small style="color:var(--text-muted,#64748b);font-size:0.76rem;margin-top:3px;display:block;">
+                        Enter full URL, e.g. https://instagram.com/yourusername
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Influencer Benchmark Field -->
+              <div class="form-group full-width conditional-field" id="influencer-details-group">
+                <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: var(--border-radius-sm); padding: 18px;">
+                  <div style="font-weight: 700; color: #92400e; margin-bottom: 6px;">
+                    ⭐ Influencer Category Benchmark / इन्फ्लुएंसर श्रेणी मानक (10,000+ Followers / फॉलोअर्स)
+                  </div>
+                  <p style="font-size: 0.85rem; color: #78350f; margin-bottom: 12px;">
+                    Influencers compete in an exclusive category for fair judging. / इन्फ्लुएंसर न्यायसंगत निर्णय हेतु अलग श्रेणी में प्रतिस्पर्धा करते हैं। Verified creators receive official certificates and recognition.
+                  </p>
+                  <div class="form-group">
+                    <label class="form-label" for="reg-followers">Approximate Follower Count / अनुमानित फॉलोअर्स की संख्या *</label>
+                    <input type="number" id="reg-followers" class="form-control" placeholder="e.g. 15000 / उदा.: 15000" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preferred Awareness Topics -->
+              <div class="form-group full-width">
+                <label class="form-label">Awareness Topics You Wish to Promote / आप किन जागरूकता विषयों का प्रचार करना चाहते हैं?</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 6px;">
+                  <label class="checkbox-group">
+                    <input type="checkbox" name="topics" value="tobacco" checked />
+                    <span>Tobacco Cessation / तंबाकू मुक्ति</span>
+                  </label>
+                  <label class="checkbox-group">
+                    <input type="checkbox" name="topics" value="oral" checked />
+                    <span>Oral Cancer Signs / मुख कैंसर के लक्षण</span>
+                  </label>
+                  <label class="checkbox-group">
+                    <input type="checkbox" name="topics" value="breast" checked />
+                    <span>Breast Cancer &amp; BSE / स्तन कैंसर एवं BSE</span>
+                  </label>
+                  <label class="checkbox-group">
+                    <input type="checkbox" name="topics" value="cervical" checked />
+                    <span>Cervical Cancer &amp; HPV / गर्भाशय ग्रीवा कैंसर एवं HPV</span>
+                  </label>
+
+                </div>
+              </div>
+
+              <!-- Campaign Pledge Acceptance -->
+              <div class="form-group full-width">
+                <label class="checkbox-group" style="background: #f1f8f9; padding: 14px; border-radius: var(--border-radius-sm);">
+                  <input type="checkbox" id="reg-pledge" required />
+                  <span>
+                    <strong>Delegate Awareness Pledge / प्रतिनिधि जागरूकता प्रतिज्ञा:</strong> I commit to spreading medically accurate cancer awareness based on the Yuva Sanchar guidelines, encouraging timely screening, and tagging official HPPCHRI handles in my awareness contributions.<br><em style="font-size:0.87em;color:var(--text-muted);">मैं प्रतिज्ञा करता/करती हूँ कि युवा संचार दिशानिर्देशों के अनुसार चिकित्सीय रूप से सटीक कैंसर जागरूकता फैलाऊँगा/फैलाऊंगी, समय पर जांच को प्रोत्साहित करूंगा/करूंगी, और HPPCHRI के आधिकारिक हैंडल को टैग करूंगा/करूंगी।</em>
+                  </span>
+                </label>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-group full-width" style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:10px;">
+                <button type="submit" class="btn btn-mint" style="display:inline-flex;width:auto;max-width:100%;padding:14px 28px;font-size:1rem;margin:0 auto;white-space:normal;word-break:break-word;text-align:center;box-sizing:border-box;">
+                  <i class="fa-solid fa-id-card"></i> Complete Registration &amp; Generate Pass / पंजीकरण पूरा करें एवं पास प्राप्त करें
+                </button>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
+                  Instant digital pass / अद्वितीय सत्यापन आईडी के साथ तत्काल डिजिटल पास
+                </div>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Post-Registration Pass Showcase -->
+      <div class="pass-showcase" id="pass-showcase-container">
+        <div class="section-header text-center" style="margin-bottom: 22px;">
+          <span class="badge badge-mint" style="margin-bottom: 8px;">Registration Successful</span>
+          <h3 style="font-size: 1.95rem; color: var(--c-deep-blue);">Your Official Participation Pass</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Save or print your delegate card. Present this pass during campus awareness drives and award ceremonies.
+          </p>
+        </div>
+
+        <div id="pass-render-area">
+          <!-- Populated by registration.js -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. Contest Structure & Grand Prizes (Redesigned Presentation) -->
   <section class="section" id="awareness-hub">
     <div class="container">
       <div class="section-header text-center">
@@ -721,211 +926,6 @@
   </section>
 
   <!-- 4. Official Delegate Registration -->
-  <section class="registration-section" id="register">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-subtitle">Join the Movement</span>
-        <h2 class="section-title">Official Delegate Registration</h2>
-        <p class="section-desc">
-          Register to receive your <strong>Official Digital Participation Delegate Pass</strong>, participate in awareness competitions, and join Gorakhpur's fight against cancer.
-        </p>
-      </div>
-
-      <!-- Registration Form Card -->
-      <div class="registration-card" id="registration-form-card">
-        <div class="reg-card-header">
-          <div class="reg-header-title">
-            <h3>Participant Registration Form</h3>
-            <p>Cancer se Jung, Gorakhpur ke Sang — Golden Jubilee 2026–27</p>
-          </div>
-          <span class="badge badge-cream" style="font-size: 0.8rem;">
-            <i class="fa-solid fa-lock"></i> Free Registration
-          </span>
-        </div>
-
-        <div class="reg-card-body">
-          <form id="drive-registration-form">
-            <div class="form-grid">
-              
-              <!-- Full Name -->
-              <div class="form-group">
-                <label class="form-label" for="reg-name">Full Name / पूरा नाम <span class="required">*</span></label>
-                <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Chandra Sharma / उदा.: रमेश चंद्र शर्मा" required />
-              </div>
-
-              <!-- WhatsApp Phone -->
-              <div class="form-group">
-                <label class="form-label" for="reg-phone">WhatsApp Number / व्हाट्सएप नंबर <span class="required">*</span></label>
-                <input type="tel" id="reg-phone" class="form-control" placeholder="10-digit / 10 अंकों का नंबर (e.g. 9838000000)" required />
-                <span class="form-hint">Used to send your registration confirmation and pass / पंजीकरण पुष्टि और पास भेजने के लिए उपयोग किया जाएगा</span>
-              </div>
-
-              <!-- Email Address -->
-              <div class="form-group">
-                <label class="form-label" for="reg-email">Email Address / ईमेल पता <span class="required">*</span></label>
-                <input type="email" id="reg-email" class="form-control" placeholder="e.g. name@example.com / उदा.: name@example.com" required />
-                <span class="form-hint">Confirmation email with your pass will be sent here / पुष्टि ईमेल यहाँ भेजा जाएगा</span>
-              </div>
-
-              <!-- Instagram Profile URL - required for all registrants -->
-              <div class="form-group">
-                <label class="form-label" for="reg-instagram-url">Instagram Profile Link / Instagram <span class="required">*</span></label>
-                <input type="url" id="reg-instagram-url" class="form-control" required
-                  placeholder="https://instagram.com/yourusername"
-                  pattern="https?://(www\.)?instagram\.com/.+" />
-                <span class="form-hint">Enter full URL e.g. https://instagram.com/yourusername</span>
-              </div>
-
-              <!-- Participant Category -->
-              <div class="form-group">
-                <label class="form-label" for="reg-category">Participant Category / प्रतिभागी श्रेणी <span class="required">*</span></label>
-                <select id="reg-category" class="form-control" required>
-                  <option value="">-- Select Your Category / अपनी श्रेणी चुनें --</option>
-                  <option value="student">Student / छात्र (School / College / University)</option>
-                  <option value="club">Club Member / क्लब सदस्य (Rotary, Lions, NGO, Youth Club)</option>
-                  <option value="influencer">Content Creator / कंटेंट क्रिएटर / Social Media Influencer / सोशल मीडिया इन्फ्लुएंसर</option>
-                  <option value="citizen">General Citizen / Health Volunteer / सामान्य नागरिक / स्वास्थ्य स्वयंसेवक</option>
-                </select>
-              </div>
-
-              <!-- Dynamic Institution / Club Field -->
-              <div class="form-group full-width" id="institution-group">
-                <label class="form-label" id="institution-label" for="reg-institution">
-                  Institution / School / College / Club Name
-                  <small style="font-weight:400;color:var(--text-muted);">संस्था / विद्यालय / महाविद्यालय / क्लब का नाम</small>
-                </label>
-                <input type="text" id="reg-institution" class="form-control" placeholder="e.g. DDU Gorakhpur University / MMMUT / AIIMS / संस्था का नाम" />
-              </div>
-
-              <!-- City / District -->
-              <div class="form-group">
-                <label class="form-label" for="reg-city">City / District / शहर / जिला <span class="required">*</span></label>
-                <input type="text" id="reg-city" class="form-control" value="Gorakhpur" placeholder="e.g. Gorakhpur, Deoria / गोरखपुर, देवरिया" required />
-              </div>
-
-              <!-- Are you active on Social Media? -->
-              <div class="form-group">
-                <label class="form-label" for="reg-social-active">Active on Social Media? / क्या आप सोशल मीडिया पर सक्रिय हैं? <span class="required">*</span></label>
-                <select id="reg-social-active" class="form-control" required>
-                  <option value="yes">Yes, I create / share content / हाँ, मैं कंटेंट बनाता/बनाती हूँ</option>
-                  <option value="no">No, participating offline / नहीं, ऑफलाइन भागीदारी</option>
-                </select>
-              </div>
-
-              <!-- Social Details Conditional Block -->
-              <div class="form-group full-width" id="social-details-group">
-                <div style="background: #f8fafc; border: 1px solid var(--border-medium); border-radius: var(--border-radius-sm); padding: 18px;">
-                  <div style="font-weight: 600; font-size: 0.92rem; color: var(--c-deep-blue); margin-bottom: 12px;">
-                    Social Media Channels / सोशल मीडिया चैनल (Where you will share awareness content / जहाँ आप जागरूकता सामग्री साझा करेंगे)
-                  </div>
-                  <div class="form-grid">
-                    <div class="form-group">
-                      <label class="form-label">Primary Platform / प्रमुख प्लेटफ़ॉर्म</label>
-                      <select id="reg-platform" class="form-control">
-                        <option value="Instagram">Instagram</option>
-                        <option value="YouTube">YouTube</option>
-                        <option value="Facebook">Facebook</option>
-                        <option value="LinkedIn">LinkedIn</option>
-                        <option value="Twitter/X">X (Twitter)</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Instagram Profile Link / Instagram &#x092a;&#x094d;&#x0930;&#x094b;&#x092b;&#x093e;&#x0907;&#x0932; &#x0932;&#x093f;&#x0902;&#x0915; <span class="required">*</span></label>
-                      <input type="url" id="reg-handle" class="form-control" required
-                        placeholder="https://instagram.com/yourusername"
-                        pattern="https?://(www\.)?instagram\.com/.+" />
-                      <small style="color:var(--text-muted,#64748b);font-size:0.76rem;margin-top:3px;display:block;">
-                        Enter full URL, e.g. https://instagram.com/yourusername
-                      </small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Influencer Benchmark Field -->
-              <div class="form-group full-width conditional-field" id="influencer-details-group">
-                <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: var(--border-radius-sm); padding: 18px;">
-                  <div style="font-weight: 700; color: #92400e; margin-bottom: 6px;">
-                    ⭐ Influencer Category Benchmark / इन्फ्लुएंसर श्रेणी मानक (10,000+ Followers / फॉलोअर्स)
-                  </div>
-                  <p style="font-size: 0.85rem; color: #78350f; margin-bottom: 12px;">
-                    Influencers compete in an exclusive category for fair judging. / इन्फ्लुएंसर न्यायसंगत निर्णय हेतु अलग श्रेणी में प्रतिस्पर्धा करते हैं। Verified creators receive official certificates and recognition.
-                  </p>
-                  <div class="form-group">
-                    <label class="form-label" for="reg-followers">Approximate Follower Count / अनुमानित फॉलोअर्स की संख्या *</label>
-                    <input type="number" id="reg-followers" class="form-control" placeholder="e.g. 15000 / उदा.: 15000" min="0" />
-                  </div>
-                </div>
-              </div>
-
-              <!-- Preferred Awareness Topics -->
-              <div class="form-group full-width">
-                <label class="form-label">Awareness Topics You Wish to Promote / आप किन जागरूकता विषयों का प्रचार करना चाहते हैं?</label>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 6px;">
-                  <label class="checkbox-group">
-                    <input type="checkbox" name="topics" value="tobacco" checked />
-                    <span>Tobacco Cessation / तंबाकू मुक्ति</span>
-                  </label>
-                  <label class="checkbox-group">
-                    <input type="checkbox" name="topics" value="oral" checked />
-                    <span>Oral Cancer Signs / मुख कैंसर के लक्षण</span>
-                  </label>
-                  <label class="checkbox-group">
-                    <input type="checkbox" name="topics" value="breast" checked />
-                    <span>Breast Cancer &amp; BSE / स्तन कैंसर एवं BSE</span>
-                  </label>
-                  <label class="checkbox-group">
-                    <input type="checkbox" name="topics" value="cervical" checked />
-                    <span>Cervical Cancer &amp; HPV / गर्भाशय ग्रीवा कैंसर एवं HPV</span>
-                  </label>
-
-                </div>
-              </div>
-
-              <!-- Campaign Pledge Acceptance -->
-              <div class="form-group full-width">
-                <label class="checkbox-group" style="background: #f1f8f9; padding: 14px; border-radius: var(--border-radius-sm);">
-                  <input type="checkbox" id="reg-pledge" required />
-                  <span>
-                    <strong>Delegate Awareness Pledge / प्रतिनिधि जागरूकता प्रतिज्ञा:</strong> I commit to spreading medically accurate cancer awareness based on the Yuva Sanchar guidelines, encouraging timely screening, and tagging official HPPCHRI handles in my awareness contributions.<br><em style="font-size:0.87em;color:var(--text-muted);">मैं प्रतिज्ञा करता/करती हूँ कि युवा संचार दिशानिर्देशों के अनुसार चिकित्सीय रूप से सटीक कैंसर जागरूकता फैलाऊँगा/फैलाऊंगी, समय पर जांच को प्रोत्साहित करूंगा/करूंगी, और HPPCHRI के आधिकारिक हैंडल को टैग करूंगा/करूंगी।</em>
-                  </span>
-                </label>
-              </div>
-
-              <!-- Submit Button -->
-              <div class="form-group full-width" style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:10px;">
-                <button type="submit" class="btn btn-mint" style="display:inline-flex;width:auto;max-width:100%;padding:14px 28px;font-size:1rem;margin:0 auto;white-space:normal;word-break:break-word;text-align:center;box-sizing:border-box;">
-                  <i class="fa-solid fa-id-card"></i> Complete Registration &amp; Generate Pass / पंजीकरण पूरा करें एवं पास प्राप्त करें
-                </button>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
-                  Instant digital pass / अद्वितीय सत्यापन आईडी के साथ तत्काल डिजिटल पास
-                </div>
-              </div>
-
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Post-Registration Pass Showcase -->
-      <div class="pass-showcase" id="pass-showcase-container">
-        <div class="section-header text-center" style="margin-bottom: 22px;">
-          <span class="badge badge-mint" style="margin-bottom: 8px;">Registration Successful</span>
-          <h3 style="font-size: 1.95rem; color: var(--c-deep-blue);">Your Official Participation Pass</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Save or print your delegate card. Present this pass during campus awareness drives and award ceremonies.
-          </p>
-        </div>
-
-        <div id="pass-render-area">
-          <!-- Populated by registration.js -->
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 5. Contest Structure & Grand Prizes (Redesigned Presentation) -->
   <section class="section section-alt" id="prizes-contests">
     <div class="container">
       <div class="section-header text-center">
@@ -1333,12 +1333,12 @@
             <div>Toll-Free: <a href="tel:18008907526" style="color: var(--c-cream); font-weight: bold;">1800 890 7526</a></div>
           </div>
           <div class="footer-contact-item">
-            <i class="fa-brands fa-whatsapp"></i>
-            <div>WhatsApp: <a href="tel:9721526808" style="color: var(--c-mint);">9721526808</a>, <a href="tel:9369106144" style="color: var(--c-mint);">9369106144</a></div>
+            <i class="fa-solid fa-phone-volume"></i>
+            <div>For Appointment Call: <a href="tel:9721526808" style="color: var(--c-mint);">9721526808</a>, <a href="tel:9369106144" style="color: var(--c-mint);">9369106144</a></div>
           </div>
           <div class="footer-contact-item">
             <i class="fa-solid fa-ban"></i>
-            <div>Quitline: <a href="tel:1800112356" style="color: #cbd5e1;">1800 112 356</a></div>
+            <div>Tobacco Cessation Quitline: <a href="tel:1800112356" style="color: #cbd5e1;">1800 112 356</a></div>
           </div>
         </div>
       </div>
